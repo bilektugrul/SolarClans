@@ -1,10 +1,13 @@
 package io.github.bilektugrul.solarclans;
 
+import com.hakan.core.HCore;
 import io.github.bilektugrul.solarclans.clan.ClanManager;
 import io.github.bilektugrul.solarclans.command.AbstractCommand;
 import io.github.bilektugrul.solarclans.command.PlayerCommands;
 import io.github.bilektugrul.solarclans.economy.VaultManager;
+import io.github.bilektugrul.solarclans.leaderboard.BalanceLeaderboard;
 import io.github.bilektugrul.solarclans.listener.PlayerListener;
+import io.github.bilektugrul.solarclans.placeholder.PAPIPlaceholders;
 import io.github.bilektugrul.solarclans.user.UserManager;
 import me.despical.commandframework.CommandFramework;
 import org.bukkit.Bukkit;
@@ -12,6 +15,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 public final class SolarClans extends JavaPlugin {
 
@@ -38,6 +42,12 @@ public final class SolarClans extends JavaPlugin {
         AbstractCommand.registerCommands(this);
 
         getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
+        new PAPIPlaceholders(this).register();
+
+        BalanceLeaderboard.reloadLeaderboard();
+        HCore.asyncScheduler()
+                .every(10, TimeUnit.MINUTES)
+                .run(BalanceLeaderboard::reloadLeaderboard);
     }
 
     @Override

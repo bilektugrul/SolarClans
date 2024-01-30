@@ -4,3 +4,4 @@ main: io.github.bilektugrul.solarclans.SolarClans
 api-version: '1.13'
 depend:
   - Vault
+  - PlaceholderAPI

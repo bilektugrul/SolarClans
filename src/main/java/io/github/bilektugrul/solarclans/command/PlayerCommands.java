@@ -4,6 +4,7 @@ import com.hakan.core.HCore;
 import io.github.bilektugrul.solarclans.SolarClans;
 import io.github.bilektugrul.solarclans.clan.Clan;
 import io.github.bilektugrul.solarclans.clan.ClanManager;
+import io.github.bilektugrul.solarclans.leaderboard.BalanceLeaderboard;
 import io.github.bilektugrul.solarclans.user.User;
 import io.github.bilektugrul.solarclans.user.UserManager;
 import io.github.bilektugrul.solarclans.util.Utils;
@@ -13,6 +14,7 @@ import me.despical.commandframework.CommandFramework;
 import me.despical.commons.string.StringMatcher;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.HashSet;
@@ -361,6 +363,7 @@ public class PlayerCommands extends AbstractCommand {
             name = "clan.info",
             aliases = "c.i",
             desc = "Clans info command",
+            cooldown = 10,
             senderType = Command.SenderType.PLAYER
     )
     public void infoCommand(CommandArguments arguments) {
@@ -379,11 +382,21 @@ public class PlayerCommands extends AbstractCommand {
                 .replace("%owner%", clan.getOwner())
                 .replace("%date%", clan.getCreationDate())
                 .replace("%size%", String.valueOf(clan.getMembers().size()));
+
+        long totalBalance = 0;
+
+        for (String member : clan.getMembers()) {
+            totalBalance += (long) economy.getBalance(Bukkit.getOfflinePlayer(member));
+        }
+
         StringBuilder members = new StringBuilder();
         for (String member : clan.getMembers()) {
             members.append(member).append("\n");
         }
-        infoMessage = infoMessage.replace("%members%", members);
+        infoMessage = infoMessage
+                .replace("%members%", members)
+                .replace("%balance%", Utils.moneyWithCommas(totalBalance));
+
         player.sendMessage(infoMessage);
     }
 
@@ -500,6 +513,36 @@ public class PlayerCommands extends AbstractCommand {
         for (Player onlineMember : clan.getOnlineMembers()) {
             onlineMember.sendMessage(Utils.getMessage("pvp-toggled.message", onlineMember));
             onlineMember.sendMessage(Utils.getMessage("pvp-toggled." + clan.isPvPEnabled(), onlineMember));
+        }
+    }
+
+    @Command(
+            name = "clan.top",
+            aliases = "c.p",
+            desc = "Clans pvp command",
+            min = 1,
+            max = 1,
+            senderType = Command.SenderType.BOTH
+    )
+    public void leaderboardCommand(CommandArguments arguments) {
+        CommandSender sender = arguments.getSender();
+        String mode = arguments.getArgument(0);
+
+        if (mode.equalsIgnoreCase("balance")) {
+            StringBuilder balanceMessage = new StringBuilder(Utils.getMessage("leaderboard.balance.message", sender)).append('\n');
+            String format = Utils.getMessage("leaderboard.balance.format", sender);
+
+            int pos = 1;
+            for (BalanceLeaderboard.LeaderboardEntry entry : BalanceLeaderboard.clanBalanceLeaderboard) {
+                balanceMessage.append(format
+                        .replace("%position%", String.valueOf(pos++))
+                        .replace("%clan%", entry.getName())
+                        .replace("%balance%", Utils.moneyWithCommas(entry.getValue())))
+                        .append('\n');
+                if (pos == 11) break;
+            }
+
+            sender.sendMessage(balanceMessage.toString());
         }
     }
 

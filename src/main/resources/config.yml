@@ -6,6 +6,8 @@ prefix: '&d[Clans]' # you can use %prefix% in everywhere
 messages:
   reloaded:
     - '%prefix% &eConfig reloaded.'
+  reloaded-leaderboard:
+    - '%prefix% &eLeaderboards reloaded.'
   no-permission:
     - '%prefix% &cI''m sorry but you do not have the permission to do that.'
 
@@ -147,6 +149,7 @@ messages:
     - '&eClan creator: &f%creator%'
     - '&eCurrent clan owner: &f%owner%'
     - '&eCreation date: &f%date%'
+    - '&eTotal clan balance: &f$%balance%'
     - '&eMembers (%size%/5):'
     - '&d%members%'
 
@@ -173,3 +176,17 @@ messages:
       - ' &eClan members will be able to hit each other now.'
     false:
       - ' &eClan members won''t be able to hit each other now.'
+
+  leaderboard:
+    balance:
+      message:
+        - '%prefix% &eClan Balance Leaderboard'
+        - '&7Position - Clan Name - Balance'
+      format:
+       - '&b#%position% &f%clan% &7- &f$%balance%'
+    kill:
+      message:
+        - '%prefix% &eClan Kills Leaderboard'
+        - '&7Position - Clan Name - Kills'
+      format:
+        - '&b#%position% &f%clan% &7- &f$%kills%'

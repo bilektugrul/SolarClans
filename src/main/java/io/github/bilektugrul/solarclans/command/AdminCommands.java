@@ -1,6 +1,7 @@
 package io.github.bilektugrul.solarclans.command;
 
 import io.github.bilektugrul.solarclans.SolarClans;
+import io.github.bilektugrul.solarclans.leaderboard.BalanceLeaderboard;
 import io.github.bilektugrul.solarclans.util.Utils;
 import me.despical.commandframework.Command;
 import me.despical.commandframework.CommandArguments;
@@ -28,6 +29,24 @@ public class AdminCommands extends AbstractCommand {
 
         plugin.reloadConfig();
         sender.sendMessage(Utils.getMessage("reloaded", sender));
+    }
+
+    @Command(
+            name = "clan.reloadleaderboard",
+            aliases = "c.rl",
+            desc = "Clans reload command",
+            senderType = Command.SenderType.BOTH
+    )
+    public void reloadLeaderboardCommand(CommandArguments arguments) {
+        CommandSender sender = arguments.getSender();;
+
+        if (!sender.hasPermission("clans.admin")) {
+            sender.sendMessage(Utils.getMessage("no-permission", sender));
+            return;
+        }
+
+        BalanceLeaderboard.reloadLeaderboard();
+        sender.sendMessage(Utils.getMessage("reloaded-leaderboard", sender));
     }
 
 }

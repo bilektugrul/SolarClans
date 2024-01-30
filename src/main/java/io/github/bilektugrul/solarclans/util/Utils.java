@@ -9,6 +9,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.*;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -17,6 +18,8 @@ import java.util.List;
 public class Utils {
 
     private static final SolarClans plugin = JavaPlugin.getPlugin(SolarClans.class);
+    private static final DecimalFormat decimalFormat = new DecimalFormat("#,###.#");
+
     public static final DateFormat dateFormat = new SimpleDateFormat("MM.dd.yyyy HH:mm:ss");
 
     public static FileConfiguration getConfig() {
@@ -91,6 +94,10 @@ public class Utils {
     public static String millisToString(long millis) {
         Date date = new Date(millis);
         return dateFormat.format(date);
+    }
+
+    public static String moneyWithCommas(long l) {
+        return decimalFormat.format(l);
     }
 
     public static void sendMessage(String msg, CommandSender sendTo) {
