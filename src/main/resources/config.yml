@@ -10,7 +10,7 @@ messages:
     - '%prefix% &cI''m sorry but you do not have the permission to do that.'
 
   main-command:
-    - '&b&l| '
+    - '%prefix% '
     - ' &f/clan create <clan name> &6| &eCreates a new clan with provided name, it costs &f$%cost%&e.'
     - ' &f/clan join <clan name> &6| &eJoins the provided clan if they have sent you an invite.'
     - ' &f/clan leave &6| &eLeaves your current clan.'
@@ -28,18 +28,23 @@ messages:
     - ' '
 
   new-clan-confirm:
-    - '&b&l| '
+    - '%prefix% '
     - ' &eAre you sure that you want to spend &f%cost% &eand create a new clan?'
     - ' &ePlease run the command again in 5 seconds to confirm.'
     - ' '
   leave-confirm:
-    - '&b&l| '
+    - '%prefix% '
     - ' &eAre you sure that you want to leave your clan?'
     - ' &ePlease run the command again in 5 seconds to confirm.'
     - ' '
   disband-confirm:
-    - '&b&l| '
+    - '%prefix% '
     - ' &eAre you sure that you want to disband your clan?'
+    - ' &ePlease run the command again in 5 seconds to confirm.'
+    - ' '
+  change-leader-confirm:
+    - '%prefix% '
+    - ' &eAre you sure that you want to transfer your clan to &f%leader%&e?'
     - ' &ePlease run the command again in 5 seconds to confirm.'
     - ' '
 
@@ -55,6 +60,8 @@ messages:
     - '&cYou own the clan, therefore you can not leave before transferring it to someone else.'
   not-the-owner:
     - '&cYou have to be the clan owner to do that.'
+  not-same-clan:
+    - '&cThat player is not in your clan.'
   not-enough-balance:
     - '&cYou do not have enough money in your account. You need %remaining% more for creating a new clan.'
   minimum-name-length:
@@ -63,12 +70,14 @@ messages:
     - '&cMaximum name length for clan names is &f%length%&e.'
 
   created:
-    - '&b&l| '
+    - '%prefix% '
     - ' &eYou have created a new clan named &f%name%&e!'
     - ' &eType &f/clan &eto see all the commands you can use to improve your clan!'
     - ' '
+  same-name:
+    - '&cAnother clan with the same name already exists.'
   disbanded:
-    - '&b&l| '
+    - '%prefix% '
     - ' &f%owner% &ehave disbanded the clan!'
     - ' '
   member-join:
@@ -79,17 +88,32 @@ messages:
     - ''
     - '&cClan member &f%member% &cjust left the clan.'
     - ''
+  member-kicked:
+    - ''
+    - '&eClan member &f%member% &egot kicked from the clan.'
+    - ''
+  got-kicked:
+    - ''
+    - '&eYou just got kicked from your clan.'
+    - ''
+  kicked-member:
+    - '&eYou just kicked &f%kicked% &efrom your clan.'
   you-left:
     - ''
     - '&cYou just left your clan.'
     - ''
 
+
+  self-invite:
+    - '&cYou can not send yourself an invitation.'
+  self-kick:
+    - '&cYou can not kick yourself from your clan.'
   sent-invite:
     - '&eYou have sent &f%invited% &ean invitation to your clan!'
   already-invited:
     - '&cPlayer &f%invited% &cis already invited to your clan.'
   new-invite:
-    - '&b&l| '
+    - '%prefix% '
     - ' &eYou have a new invitation from &f%inviter%&e to clan &f%clan%&e.'
     - ' &eType &f/clan join %clan% &eto accept the invitation!'
     - ' &eInvitation will expire in 20 seconds.'
@@ -102,3 +126,40 @@ messages:
     - '&cThe owner of clan &f%clan% &chaven''t invited you to their clan.'
   joined-clan:
     - '&eYou just joined the clan &f%clan%&e!'
+  clan-not-available:
+    - '&cThat clan does not exist.'
+
+  clan-chat:
+    'true':
+      - '&eYou are now talking in clan chat.'
+    'false':
+      - '&eYou just left clan chat.'
+    format:
+      - '&d[Clan Chat] &e%player%&7: &6%message%'
+    clan-disabled:
+      - '&cYou are not in a clan anymore, therefore your clan chat has disabled.'
+      - '&cThe last message you sent won''t be sent to protect you.'
+
+  clan-info:
+    - ''
+    - '&eClan name: &f%name%'
+    - '&eClan creator: &f%creator%'
+    - '&eCurrent clan owner: &f%owner%'
+    - '&eCreation date: &f%date%'
+    - '&eMembers (%size%/5):'
+    - '&d%members%'
+
+  change-to-self:
+    - '&cYou already own the clan. You can not transfer it to yourself.'
+  you-own-now:
+    - '&eYou are the new owner of your clan now.'
+  owner-changed:
+    - '%prefix%'
+    - ' &eOld owner &f%old% &ehave given the ownership to &f%new%&e!'
+    - ' &eYou must obey their rules now.'
+
+  name-changed:
+    - '%prefix%'
+    - ' &eThe owner has changed the clan name.'
+    - ' &eThe old name was: &f%old%'
+    - ' &eNew name is: &f%new%'

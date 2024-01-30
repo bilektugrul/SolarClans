@@ -8,19 +8,21 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 public class Clan {
 
     private static final SolarClans plugin = JavaPlugin.getPlugin(SolarClans.class);
+    private static final SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
 
     private final long ID;
     private final YamlConfiguration data;
 
-    private String name;
-    private String owner;
+    private String name, owner, creator;
 
     private final List<String> members = new ArrayList<>();
     private final List<Player> onlineMembers = new ArrayList<>();
@@ -43,6 +45,10 @@ public class Clan {
         return owner;
     }
 
+    public String getCreator() {
+        return creator;
+    }
+
     public List<String> getMembers() {
         return members;
     }
@@ -56,6 +62,13 @@ public class Clan {
 
         return this;
     }
+
+    public Clan setCreator(String creator) {
+        this.creator = creator;
+
+        return this;
+    }
+
 
     public Clan setOwner(String owner) {
         this.owner = owner;
@@ -87,10 +100,15 @@ public class Clan {
         }
     }
 
+    public String getCreationDate() {
+        return format.format(new Date(ID));
+    }
+
     public void save() throws IOException {
         data.set("ID", ID);
         data.set("name", name);
         data.set("owner", owner);
+        data.set("creator", creator);
         data.set("members", members);
 
         data.save(new File(plugin.getDataFolder() + "/clans/" + ID + ".yml"));

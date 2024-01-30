@@ -1,5 +1,6 @@
 package io.github.bilektugrul.solarclans.clan;
 
+import com.hakan.core.HCore;
 import io.github.bilektugrul.solarclans.SolarClans;
 import io.github.bilektugrul.solarclans.user.User;
 import io.github.bilektugrul.solarclans.user.UserManager;
@@ -40,6 +41,10 @@ public class ClanManager {
         }
 
         for (File clanFile : clanFiles) {
+            if (clanFile.getName().contains("-disbanded")) {
+                continue;
+            }
+
             loadClan(YamlConfiguration.loadConfiguration(clanFile));
         }
     }
@@ -49,13 +54,16 @@ public class ClanManager {
 
         String name = clanFile.getString("name");
         String owner = clanFile.getString("owner");
+        String creator = clanFile.getString("creator");
         List<String> members = clanFile.getStringList("members");
 
         Clan clan = new Clan(clanFile, id)
                 .setName(name)
                 .addMembers(members)
-                .setOwner(owner);
+                .setOwner(owner)
+                .setCreator(creator);
         clans.add(clan);
+        clan.updateOnlineMembers();
     }
 
     public void saveClans() throws IOException {
@@ -65,12 +73,19 @@ public class ClanManager {
     }
 
     public void createClan(String name, Player owner) {
-        long id = System.nanoTime();
+        long id = System.currentTimeMillis();
+        if (getClan(id) != null) {
+            HCore.syncScheduler()
+                    .after(5)
+                    .run(() -> createClan(name, owner));
+            return;
+        }
 
         YamlConfiguration data = YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder() + "/clans/" + name + ".yml"));
         Clan clan = new Clan(data, id)
                 .setName(name)
                 .addMembers(owner.getName())
+                .setCreator(owner.getName())
                 .setOwner(owner.getName());
         userManager.getUser(owner).setClanID(id);
         clans.add(clan);
@@ -101,9 +116,49 @@ public class ClanManager {
         clan.updateOnlineMembers();
 
         for (Player onlineMember : clan.getOnlineMembers()) {
-            onlineMember.sendMessage(Utils.getMessage("member-left", onlineMember).replace("%member%", player.getName()));
+            onlineMember.sendMessage(Utils.getMessage("member-left", onlineMember)
+                    .replace("%member%", player.getName()));
         }
 
+    }
+
+    public void kickFromClan(Player player, User user) {
+        Clan clan = getClan(user.getClanID());
+        user.setClanID(-1);
+
+        player.sendMessage(Utils.getMessage("got-kicked", player));
+        clan.getMembers().remove(player.getName());
+        clan.updateOnlineMembers();
+
+        for (Player onlineMember : clan.getOnlineMembers()) {
+            onlineMember.sendMessage(Utils.getMessage("member-kicked", onlineMember)
+                    .replace("%member%", player.getName()));
+        }
+    }
+
+    public void changeLeader(long clanID, Player player) {
+        Clan clan = getClan(clanID);
+
+        String oldOwner = clan.getOwner();
+        clan.setOwner(player.getName());
+        player.sendMessage(Utils.getMessage("you-own-now", player));
+
+        for (Player onlineMember : clan.getOnlineMembers()) {
+            onlineMember.sendMessage(Utils.getMessage("owner-changed", onlineMember)
+                    .replace("%new%", player.getName())
+                    .replace("%old%", oldOwner));
+        }
+    }
+
+    public void changeName(Clan clan, String newName) {
+        String oldName = clan.getName();
+        clan.setName(newName);
+
+        for (Player onlineMember : clan.getOnlineMembers()) {
+            onlineMember.sendMessage(Utils.getMessage("name-changed", onlineMember)
+                    .replace("%new%", newName)
+                    .replace("%old%", oldName));
+        }
     }
 
     public void disbandClan(long clanID) {
@@ -119,6 +174,15 @@ public class ClanManager {
             }
         }
 
+        try {
+            clan.save();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        File clanFile = new File(plugin.getDataFolder() + "/clans/" + clan.getID() + ".yml");
+        File newClanFile = new File(plugin.getDataFolder() + "/clans/" + clan.getID() + "-disbanded.yml");
+        clanFile.renameTo(newClanFile);
         clans.remove(clan);
     }
 

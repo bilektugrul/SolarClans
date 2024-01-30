@@ -17,9 +17,10 @@ public class User {
 
     private final YamlConfiguration data;
     private final String name;
+    private final List<Long> clanInvitations = new ArrayList<>();
 
     private long clanID = -1;
-    private final List<Long> clanInvitations = new ArrayList<>();
+    private boolean clanChat;
 
     public User(YamlConfiguration data, String name) {
         this.data = data;
@@ -75,6 +76,14 @@ public class User {
 
     public void removeInvitation(long clanID) {
         clanInvitations.remove(clanID);
+    }
+
+    public boolean isClanChat() {
+        return clanChat;
+    }
+
+    public void toggleClanChat() {
+        this.clanChat = !this.clanChat;
     }
 
     public void save() throws IOException {

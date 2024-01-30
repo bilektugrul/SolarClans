@@ -78,6 +78,11 @@ public class PlayerCommands extends AbstractCommand {
         }
 
         String clanName = arguments.getArgument(0);
+        if (clanManager.getClan(clanName) != null) {
+            player.sendMessage(Utils.getMessage("same-name", player));
+            return;
+        }
+
         if (clanName.length() < min) {
             player.sendMessage(Utils.getMessage("minimum-name-length", player).replace("%length%", String.valueOf(min)));
             return;
@@ -124,7 +129,13 @@ public class PlayerCommands extends AbstractCommand {
             return;
         }
 
-        Player invited = Bukkit.getPlayer(arguments.getArgument(0));
+        String toInvite = arguments.getArgument(0);
+        if (toInvite.equalsIgnoreCase(user.getName())) {
+            player.sendMessage(Utils.getMessage("self-invite", player));
+            return;
+        }
+
+        Player invited = Bukkit.getPlayer(toInvite);
         if (invited == null) {
             player.sendMessage(Utils.getMessage("player-not-found", player));
             return;
@@ -187,9 +198,15 @@ public class PlayerCommands extends AbstractCommand {
 
         String clanName = arguments.getArgument(0);
         Clan clan = clanManager.getClan(clanName);
+        if (clan == null) {
+            player.sendMessage(Utils.getMessage("clan-not-available", player));
+            return;
+        }
+
         long clanID = clan.getID();
         if (!user.isInvited(clanID)) {
-            player.sendMessage(Utils.getMessage("not-invited", player));
+            player.sendMessage(Utils.getMessage("not-invited", player)
+                    .replace("%clan%", clan.getName()));
             return;
         }
 
@@ -232,6 +249,54 @@ public class PlayerCommands extends AbstractCommand {
         player.sendMessage(Utils.getMessage("leave-confirm", player));
     }
 
+    @Command(
+            name = "clan.kick",
+            aliases = "c.k",
+            desc = "Clans kick command",
+            min = 1,
+            max = 1,
+            senderType = Command.SenderType.PLAYER
+    )
+    public void kickCommand(CommandArguments arguments) {
+        Player player = arguments.getSender();
+        User user = userManager.getUser(player);
+
+        if (!user.hasClan()) {
+            player.sendMessage(Utils.getMessage("not-in-a-clan", player));
+            return;
+        }
+
+        if (!user.isClanOwner()) {
+            player.sendMessage(Utils.getMessage("not-the-owner", player));
+            return;
+        }
+
+        String toKickStr = arguments.getArgument(0);
+        if (toKickStr.equalsIgnoreCase(user.getName())) {
+            player.sendMessage(Utils.getMessage("self-kick", player));
+            return;
+        }
+
+        Player toKick = Bukkit.getPlayer(toKickStr);
+        if (toKick == null) {
+            player.sendMessage(Utils.getMessage("player-not-found", player));
+            return;
+        }
+
+        User toKickUser = userManager.getUser(toKick);
+        long ownClan = user.getClanID();
+        long toKickClan = toKickUser.getClanID();
+
+        if (ownClan != toKickClan) {
+            player.sendMessage(Utils.getMessage("not-same-clan", player));
+            return;
+        }
+
+        clanManager.kickFromClan(toKick, toKickUser);
+        player.sendMessage(Utils.getMessage("kicked-member", player).replace("%kicked%", toKick.getName()));
+
+    }
+
     private final Set<Player> disbandConfirmWaiting = new HashSet<>();
 
     @Command(
@@ -266,6 +331,143 @@ public class PlayerCommands extends AbstractCommand {
                 .run(() -> disbandConfirmWaiting.remove(player));
 
         player.sendMessage(Utils.getMessage("disband-confirm", player));
+    }
+
+    @Command(
+            name = "clan.chat",
+            aliases = "c.c",
+            desc = "Clans chat command",
+            senderType = Command.SenderType.PLAYER
+    )
+    public void chatCommand(CommandArguments arguments) {
+        Player player = arguments.getSender();
+        User user = userManager.getUser(player);
+
+        if (!user.hasClan()) {
+            player.sendMessage(Utils.getMessage("not-in-a-clan", player));
+            return;
+        }
+
+        user.toggleClanChat();
+        player.sendMessage(Utils.getMessage("clan-chat." + user.isClanChat(), player));
+    }
+
+    @Command(
+            name = "clan.info",
+            aliases = "c.i",
+            desc = "Clans info command",
+            senderType = Command.SenderType.PLAYER
+    )
+    public void infoCommand(CommandArguments arguments) {
+        Player player = arguments.getSender();
+        User user = userManager.getUser(player);
+
+        if (!user.hasClan()) {
+            player.sendMessage(Utils.getMessage("not-in-a-clan", player));
+            return;
+        }
+
+        Clan clan = clanManager.getClan(user.getClanID());
+        String infoMessage = Utils.getMessage("clan-info", player)
+                .replace("%name%", clan.getName())
+                .replace("%creator%", clan.getCreator())
+                .replace("%owner%", clan.getOwner())
+                .replace("%date%", clan.getCreationDate())
+                .replace("%size%", String.valueOf(clan.getMembers().size()));
+        StringBuilder members = new StringBuilder();
+        for (String member : clan.getMembers()) {
+            members.append(member).append("\n");
+        }
+        infoMessage = infoMessage.replace("%members%", members);
+        player.sendMessage(infoMessage);
+    }
+
+    private final Set<Player> changeLeaderConfirmWaiting = new HashSet<>();
+
+    @Command(
+            name = "clan.setleader",
+            aliases = "c.sl",
+            desc = "Clans set leader command",
+            min = 1,
+            max = 1,
+            senderType = Command.SenderType.PLAYER
+    )
+    public void setLeader(CommandArguments arguments) {
+        Player player = arguments.getSender();
+        User user = userManager.getUser(player);
+
+        if (!user.hasClan()) {
+            player.sendMessage(Utils.getMessage("not-in-a-clan", player));
+            return;
+        }
+
+        if (!user.isClanOwner()) {
+            player.sendMessage(Utils.getMessage("not-the-owner", player));
+            return;
+        }
+
+        String newLeader = arguments.getArgument(0);
+        if (newLeader.equalsIgnoreCase(user.getName())) {
+            player.sendMessage(Utils.getMessage("change-to-self", player));
+            return;
+        }
+
+        Player newLeaderPlayer = Bukkit.getPlayer(newLeader);
+        if (newLeaderPlayer == null) {
+            player.sendMessage(Utils.getMessage("player-not-found", player));
+            return;
+        }
+
+        User newLeaderUser = userManager.getUser(newLeaderPlayer);
+        long ownClan = user.getClanID();
+        long toKickClan = newLeaderUser.getClanID();
+
+        if (ownClan != toKickClan) {
+            player.sendMessage(Utils.getMessage("not-same-clan", player));
+            return;
+        }
+
+        if (changeLeaderConfirmWaiting.contains(player)) {
+            clanManager.changeLeader(ownClan, newLeaderPlayer);
+            changeLeaderConfirmWaiting.remove(player);
+            return;
+        }
+
+        changeLeaderConfirmWaiting.add(player);
+        HCore.syncScheduler()
+                .after(5000, TimeUnit.MILLISECONDS)
+                .run(() -> changeLeaderConfirmWaiting.remove(player));
+
+        player.sendMessage(Utils.getMessage("change-leader-confirm", player)
+                .replace("%leader%", newLeaderPlayer.getName()));
+    }
+
+    @Command(
+            name = "clan.rename",
+            aliases = "c.rn",
+            desc = "Clans rename command",
+            min = 1,
+            max = 1,
+            senderType = Command.SenderType.PLAYER
+    )
+    public void renameCommand(CommandArguments arguments) {
+        Player player = arguments.getSender();
+        User user = userManager.getUser(player);
+
+        if (!user.hasClan()) {
+            player.sendMessage(Utils.getMessage("not-in-a-clan", player));
+            return;
+        }
+
+        if (!user.isClanOwner()) {
+            player.sendMessage(Utils.getMessage("not-the-owner", player));
+            return;
+        }
+
+        Clan clan = clanManager.getClan(user.getClanID());
+        String newName = arguments.getArgument(0);
+
+        clanManager.changeName(clan, newName);
     }
 
 }
