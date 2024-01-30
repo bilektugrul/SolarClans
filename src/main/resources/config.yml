@@ -1,0 +1,104 @@
+new-clan-cost: 1000
+minimum-name-length: 3
+maximum-name-length: 9
+prefix: '&d[Clans]' # you can use %prefix% in everywhere
+
+messages:
+  reloaded:
+    - '%prefix% &eConfig reloaded.'
+  no-permission:
+    - '%prefix% &cI''m sorry but you do not have the permission to do that.'
+
+  main-command:
+    - '&b&l| '
+    - ' &f/clan create <clan name> &6| &eCreates a new clan with provided name, it costs &f$%cost%&e.'
+    - ' &f/clan join <clan name> &6| &eJoins the provided clan if they have sent you an invite.'
+    - ' &f/clan leave &6| &eLeaves your current clan.'
+    - ' '
+    - ' &f/clan info [<clan name>] &6| &eSends info about provided clan. '
+    - ' &f/clan vault &6| &eOpens your clan''s vault. You can store everything in it.'
+    - ' &f/clan chat &6| &ePuts you into the clan message channel.'
+    - ' '
+    - ' &f/clan invite <player name> &6| &eInvites proded player to the clan. Only clan owner can invite players.'
+    - ' &f/clan kick <player> &6| &eKicks provided player from the clan.'
+    - ' &f/clan setleader <player> &6| &eMakes provided player new owner of the clan.'
+    - ' &f/clan rename <new name> &6| &eChanges the clan name.'
+    - ' &f/clan disband &6| &eDisbands the clan.'
+    - ' &f/clan pvp <on / off> &6| &eToggles PvP between clan members.'
+    - ' '
+
+  new-clan-confirm:
+    - '&b&l| '
+    - ' &eAre you sure that you want to spend &f%cost% &eand create a new clan?'
+    - ' &ePlease run the command again in 5 seconds to confirm.'
+    - ' '
+  leave-confirm:
+    - '&b&l| '
+    - ' &eAre you sure that you want to leave your clan?'
+    - ' &ePlease run the command again in 5 seconds to confirm.'
+    - ' '
+  disband-confirm:
+    - '&b&l| '
+    - ' &eAre you sure that you want to disband your clan?'
+    - ' &ePlease run the command again in 5 seconds to confirm.'
+    - ' '
+
+  player-not-found:
+    - '&cThat player is not online.'
+  already-have-clan:
+    - '&cYou need to quit your clan before doing that.'
+  invited-have-clan:
+    - '&cPlayer &f%invited%&c is already in a clan.'
+  not-in-a-clan:
+    - '&cYou are not in any clan.'
+  own-clan:
+    - '&cYou own the clan, therefore you can not leave before transferring it to someone else.'
+  not-the-owner:
+    - '&cYou have to be the clan owner to do that.'
+  not-enough-balance:
+    - '&cYou do not have enough money in your account. You need %remaining% more for creating a new clan.'
+  minimum-name-length:
+    - '&cMinimum required name length for clan names is &f%length%&e.'
+  maximum-name-length:
+    - '&cMaximum name length for clan names is &f%length%&e.'
+
+  created:
+    - '&b&l| '
+    - ' &eYou have created a new clan named &f%name%&e!'
+    - ' &eType &f/clan &eto see all the commands you can use to improve your clan!'
+    - ' '
+  disbanded:
+    - '&b&l| '
+    - ' &f%owner% &ehave disbanded the clan!'
+    - ' '
+  member-join:
+    - ''
+    - '&eNew clan member &f%member% &ejust joined the clan!'
+    - ''
+  member-left:
+    - ''
+    - '&cClan member &f%member% &cjust left the clan.'
+    - ''
+  you-left:
+    - ''
+    - '&cYou just left your clan.'
+    - ''
+
+  sent-invite:
+    - '&eYou have sent &f%invited% &ean invitation to your clan!'
+  already-invited:
+    - '&cPlayer &f%invited% &cis already invited to your clan.'
+  new-invite:
+    - '&b&l| '
+    - ' &eYou have a new invitation from &f%inviter%&e to clan &f%clan%&e.'
+    - ' &eType &f/clan join %clan% &eto accept the invitation!'
+    - ' &eInvitation will expire in 20 seconds.'
+    - ''
+  invite-expired:
+    - '&eInvitation from clan &f%clan% &eis now expired.'
+  sent-invite-expired:
+    - '&eInvitation sent to &f%invited% &eis now expired.'
+  not-invited:
+    - '&cThe owner of clan &f%clan% &chaven''t invited you to their clan.'
+  joined-clan:
+    - '&eYou just joined the clan &f%clan%&e!'
