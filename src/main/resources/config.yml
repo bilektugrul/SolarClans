@@ -54,6 +54,8 @@ messages:
     - '&cYou need to quit your clan before doing that.'
   invited-have-clan:
     - '&cPlayer &f%invited%&c is already in a clan.'
+  clan-full:
+    - '&cClan is already full. Somebody has to leave before inviting more people.'
   not-in-a-clan:
     - '&cYou are not in any clan.'
   own-clan:

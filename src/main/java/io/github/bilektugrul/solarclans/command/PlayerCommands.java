@@ -129,6 +129,13 @@ public class PlayerCommands extends AbstractCommand {
             return;
         }
 
+        long clanID = user.getClanID();
+        Clan clan = clanManager.getClan(clanID);
+        if (clan.getMembers().size() == 5) {
+            player.sendMessage(Utils.getMessage("clan-full", player));
+            return;
+        }
+
         String toInvite = arguments.getArgument(0);
         if (toInvite.equalsIgnoreCase(user.getName())) {
             player.sendMessage(Utils.getMessage("self-invite", player));
@@ -142,7 +149,6 @@ public class PlayerCommands extends AbstractCommand {
         }
 
         User invitedUser = userManager.getUser(invited);
-        long clanID = user.getClanID();
         if (invitedUser.isInvited(clanID)) {
             player.sendMessage(Utils.getMessage("already-invited", player)
                     .replace("%invited%", invited.getName()));
@@ -155,7 +161,6 @@ public class PlayerCommands extends AbstractCommand {
             return;
         }
 
-        Clan clan = clanManager.getClan(clanID);
         invitedUser.addInvitation(clanID);
 
         player.sendMessage(Utils.getMessage("sent-invite", player).replace("%invited%", invited.getName()));
