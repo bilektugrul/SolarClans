@@ -1,6 +1,7 @@
 package io.github.bilektugrul.solarclans.clan;
 
 import io.github.bilektugrul.solarclans.SolarClans;
+import io.github.bilektugrul.solarclans.util.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -8,21 +9,19 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 public class Clan {
 
     private static final SolarClans plugin = JavaPlugin.getPlugin(SolarClans.class);
-    private static final SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
 
     private final long ID;
     private final YamlConfiguration data;
 
     private String name, owner, creator;
+    private boolean pvp;
 
     private final List<String> members = new ArrayList<>();
     private final List<Player> onlineMembers = new ArrayList<>();
@@ -101,7 +100,15 @@ public class Clan {
     }
 
     public String getCreationDate() {
-        return format.format(new Date(ID));
+        return Utils.millisToString(ID);
+    }
+
+    public boolean isPvPEnabled() {
+        return pvp;
+    }
+
+    public void togglePvP() {
+        this.pvp = !this.pvp;
     }
 
     public void save() throws IOException {

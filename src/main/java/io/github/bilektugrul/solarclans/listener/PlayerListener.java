@@ -9,6 +9,7 @@ import io.github.bilektugrul.solarclans.util.Utils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -66,6 +67,21 @@ public class PlayerListener implements Listener {
             String format = Utils.getMessage("clan-chat.format", player)
                     .replace("%message%", e.getMessage());
             clanManager.getClan(user.getClanID()).getOnlineMembers().forEach(member -> member.sendMessage(format));
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onDamage(EntityDamageByEntityEvent e) {
+        if (e.getEntity() instanceof Player player && e.getDamager() instanceof Player attacker) {
+            User user = userManager.getUser(player);
+            long clan = user.getClanID();
+            User attackerUser = userManager.getUser(attacker);
+            long attackerClan = attackerUser.getClanID();
+
+            if (clan == attackerClan) {
+                Clan c = clanManager.getClan(clan);
+                e.setCancelled(!c.isPvPEnabled());
+            }
         }
     }
 

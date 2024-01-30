@@ -105,7 +105,6 @@ messages:
     - '&cYou just left your clan.'
     - ''
 
-
   self-invite:
     - '&cYou can not send yourself an invitation.'
   self-kick:
@@ -165,3 +164,12 @@ messages:
     - ' &eThe owner has changed the clan name.'
     - ' &eThe old name was: &f%old%'
     - ' &eNew name is: &f%new%'
+
+  pvp-toggled:
+    message:
+      - '%prefix%'
+      - ' &eClan owner toggled Clan Friendly Fire.'
+    true:
+      - ' &eClan members will be able to hit each other now.'
+    false:
+      - ' &eClan members won''t be able to hit each other now.'

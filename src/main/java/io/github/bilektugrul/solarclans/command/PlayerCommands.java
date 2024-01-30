@@ -475,4 +475,32 @@ public class PlayerCommands extends AbstractCommand {
         clanManager.changeName(clan, newName);
     }
 
+    @Command(
+            name = "clan.pvp",
+            aliases = "c.p",
+            desc = "Clans pvp command",
+            senderType = Command.SenderType.PLAYER
+    )
+    public void pvpToggleCommand(CommandArguments arguments) {
+        Player player = arguments.getSender();
+        User user = userManager.getUser(player);
+
+        if (!user.hasClan()) {
+            player.sendMessage(Utils.getMessage("not-in-a-clan", player));
+            return;
+        }
+
+        if (!user.isClanOwner()) {
+            player.sendMessage(Utils.getMessage("not-the-owner", player));
+            return;
+        }
+
+        Clan clan = clanManager.getClan(user.getClanID());
+        clan.togglePvP();
+        for (Player onlineMember : clan.getOnlineMembers()) {
+            onlineMember.sendMessage(Utils.getMessage("pvp-toggled.message", onlineMember));
+            onlineMember.sendMessage(Utils.getMessage("pvp-toggled." + clan.isPvPEnabled(), onlineMember));
+        }
+    }
+
 }
