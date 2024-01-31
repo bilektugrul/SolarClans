@@ -6,6 +6,7 @@ import io.github.bilektugrul.solarclans.command.AbstractCommand;
 import io.github.bilektugrul.solarclans.command.PlayerCommands;
 import io.github.bilektugrul.solarclans.economy.VaultManager;
 import io.github.bilektugrul.solarclans.leaderboard.BalanceLeaderboard;
+import io.github.bilektugrul.solarclans.leaderboard.KillLeaderboard;
 import io.github.bilektugrul.solarclans.listener.PlayerListener;
 import io.github.bilektugrul.solarclans.placeholder.PAPIPlaceholders;
 import io.github.bilektugrul.solarclans.user.UserManager;
@@ -44,10 +45,9 @@ public final class SolarClans extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
         new PAPIPlaceholders(this).register();
 
-        BalanceLeaderboard.reloadLeaderboard();
         HCore.asyncScheduler()
                 .every(10, TimeUnit.MINUTES)
-                .run(BalanceLeaderboard::reloadLeaderboard);
+                .run(this::reloadLeaderboards);
     }
 
     @Override
@@ -58,6 +58,12 @@ public final class SolarClans extends JavaPlugin {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void reloadLeaderboards() {
+        System.out.println("testsdfafaadfgdsagdsagads");
+        BalanceLeaderboard.reloadLeaderboard();
+        KillLeaderboard.reloadLeaderboard();
     }
 
     public VaultManager getVaultManager() {

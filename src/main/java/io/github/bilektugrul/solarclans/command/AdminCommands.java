@@ -2,6 +2,7 @@ package io.github.bilektugrul.solarclans.command;
 
 import io.github.bilektugrul.solarclans.SolarClans;
 import io.github.bilektugrul.solarclans.leaderboard.BalanceLeaderboard;
+import io.github.bilektugrul.solarclans.leaderboard.KillLeaderboard;
 import io.github.bilektugrul.solarclans.util.Utils;
 import me.despical.commandframework.Command;
 import me.despical.commandframework.CommandArguments;
@@ -15,7 +16,7 @@ public class AdminCommands extends AbstractCommand {
 
     @Command(
             name = "clan.reload",
-            aliases = "c.r",
+            aliases = {"c.r", "c.reload"},
             desc = "Clans reload command",
             senderType = Command.SenderType.BOTH
     )
@@ -33,7 +34,7 @@ public class AdminCommands extends AbstractCommand {
 
     @Command(
             name = "clan.reloadleaderboard",
-            aliases = "c.rl",
+            aliases = {"c.rl", "clans.rl", "clans.reloadleaderboard"},
             desc = "Clans reload command",
             senderType = Command.SenderType.BOTH
     )
@@ -46,6 +47,7 @@ public class AdminCommands extends AbstractCommand {
         }
 
         BalanceLeaderboard.reloadLeaderboard();
+        KillLeaderboard.reloadLeaderboard();
         sender.sendMessage(Utils.getMessage("reloaded-leaderboard", sender));
     }
 

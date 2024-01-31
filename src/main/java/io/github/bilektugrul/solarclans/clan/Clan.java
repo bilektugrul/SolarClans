@@ -99,6 +99,10 @@ public class Clan {
         kills++;
     }
 
+    public int getKills() {
+        return kills;
+    }
+
     public void updateOnlineMembers() {
         onlineMembers.clear();
 

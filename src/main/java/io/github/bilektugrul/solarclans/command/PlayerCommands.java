@@ -37,7 +37,7 @@ public class PlayerCommands extends AbstractCommand {
 
     @Command(
             name = "clan",
-            aliases = "c",
+            aliases = {"c", "clans"},
             desc = "Clans main command",
             allowInfiniteArgs = true,
             senderType = Command.SenderType.BOTH
@@ -55,7 +55,7 @@ public class PlayerCommands extends AbstractCommand {
 
     @Command(
             name = "clan.create",
-            aliases = "c.c",
+            aliases = {"c.c", "clans.c", "clans.create"},
             desc = "Clans main command",
             min = 1,
             max = 1,
@@ -114,7 +114,7 @@ public class PlayerCommands extends AbstractCommand {
 
     @Command(
             name = "clan.invite",
-            aliases = "c.inv",
+            aliases = {"c.inv", "clans.inv", "clans.invite"},
             min = 1,
             max = 1,
             desc = "Clans invite command",
@@ -190,7 +190,7 @@ public class PlayerCommands extends AbstractCommand {
 
     @Command(
             name = "clan.join",
-            aliases = "c.j",
+            aliases = {"c.j", "clans.join", "clans.j"},
             min = 1,
             max = 1,
             desc = "Clans join command",
@@ -226,7 +226,7 @@ public class PlayerCommands extends AbstractCommand {
 
     @Command(
             name = "clan.leave",
-            aliases = "c.l",
+            aliases = {"c.l", "clans.leave", "clans.l"},
             desc = "Clans leave command",
             senderType = Command.SenderType.PLAYER
     )
@@ -260,7 +260,7 @@ public class PlayerCommands extends AbstractCommand {
 
     @Command(
             name = "clan.kick",
-            aliases = "c.k",
+            aliases = {"c.k", "clans.k", "clans.kick"},
             desc = "Clans kick command",
             min = 1,
             max = 1,
@@ -310,7 +310,7 @@ public class PlayerCommands extends AbstractCommand {
 
     @Command(
             name = "clan.disband",
-            aliases = "c.d",
+            aliases = {"c.d", "clans.disband", "clans.d"},
             desc = "Clans disband command",
             senderType = Command.SenderType.PLAYER
     )
@@ -344,7 +344,7 @@ public class PlayerCommands extends AbstractCommand {
 
     @Command(
             name = "clan.chat",
-            aliases = "c.c",
+            aliases = {"c.c", "clans.c", "clans.chat"},
             desc = "Clans chat command",
             senderType = Command.SenderType.PLAYER
     )
@@ -363,7 +363,7 @@ public class PlayerCommands extends AbstractCommand {
 
     @Command(
             name = "clan.info",
-            aliases = "c.i",
+            aliases = {"c.i", "clans.i", "clans.info"},
             desc = "Clans info command",
             cooldown = 10,
             senderType = Command.SenderType.PLAYER
@@ -397,6 +397,7 @@ public class PlayerCommands extends AbstractCommand {
         }
         infoMessage = infoMessage
                 .replace("%members%", members)
+                .replace("%kills%", String.valueOf(clan.getKills()))
                 .replace("%balance%", Utils.moneyWithCommas(totalBalance));
 
         player.sendMessage(infoMessage);
@@ -406,7 +407,7 @@ public class PlayerCommands extends AbstractCommand {
 
     @Command(
             name = "clan.setleader",
-            aliases = "c.sl",
+            aliases = {"c.sl", "clans.sl", "clans.setleader"},
             desc = "Clans set leader command",
             min = 1,
             max = 1,
@@ -464,7 +465,7 @@ public class PlayerCommands extends AbstractCommand {
 
     @Command(
             name = "clan.rename",
-            aliases = "c.rn",
+            aliases = {"c.rn", "clans.rn", "clans.rename"},
             desc = "Clans rename command",
             min = 1,
             max = 1,
@@ -492,7 +493,7 @@ public class PlayerCommands extends AbstractCommand {
 
     @Command(
             name = "clan.pvp",
-            aliases = "c.p",
+            aliases = {"c.p", "clans.p", "clans.pvp"},
             desc = "Clans pvp command",
             senderType = Command.SenderType.PLAYER
     )
@@ -520,8 +521,8 @@ public class PlayerCommands extends AbstractCommand {
 
     @Command(
             name = "clan.top",
-            aliases = "c.p",
-            desc = "Clans pvp command",
+            aliases = {"c.top", "clans.top"},
+            desc = "Clans leaderboard command",
             min = 1,
             max = 1,
             senderType = Command.SenderType.BOTH
@@ -549,15 +550,15 @@ public class PlayerCommands extends AbstractCommand {
         }
 
         if (mode.contains("kill")) {
-            StringBuilder balanceMessage = new StringBuilder(Utils.getMessage("leaderboard.kills.message", sender)).append('\n');
-            String format = Utils.getMessage("leaderboard.kills.format", sender);
+            StringBuilder balanceMessage = new StringBuilder(Utils.getMessage("leaderboard.kill.message", sender)).append('\n');
+            String format = Utils.getMessage("leaderboard.kill.format", sender);
 
             int pos = 1;
             for (LeaderboardEntry entry : KillLeaderboard.killLeaderboard) {
                 balanceMessage.append(format
                                 .replace("%position%", String.valueOf(pos++))
                                 .replace("%clan%", entry.name())
-                                .replace("%balance%", String.valueOf(entry.value())))
+                                .replace("%kills%", String.valueOf(entry.value())))
                         .append('\n');
                 if (pos == 11) break;
             }

@@ -50,9 +50,9 @@ public class PAPIPlaceholders extends PlaceholderExpansion {
             if (place >= BalanceLeaderboard.clanBalanceLeaderboard.size()) return "";
 
             if (identifier.endsWith("name")) {
-                return BalanceLeaderboard.clanBalanceLeaderboard.get(place).getName();
+                return BalanceLeaderboard.clanBalanceLeaderboard.get(place).name();
             } else if (identifier.endsWith("balance")) {
-                return Utils.moneyWithCommas(BalanceLeaderboard.clanBalanceLeaderboard.get(place).getValue());
+                return Utils.moneyWithCommas(BalanceLeaderboard.clanBalanceLeaderboard.get(place).value());
             }
 
             return "";

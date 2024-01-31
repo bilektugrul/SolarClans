@@ -150,6 +150,7 @@ messages:
     - '&eCurrent clan owner: &f%owner%'
     - '&eCreation date: &f%date%'
     - '&eTotal clan balance: &f$%balance%'
+    - '&eTotal clan kills: &f$%kills%'
     - '&eMembers (%size%/5):'
     - '&d%members%'
 
@@ -189,4 +190,4 @@ messages:
         - '%prefix% &eClan Kills Leaderboard'
         - '&7Position - Clan Name - Kills'
       format:
-        - '&b#%position% &f%clan% &7- &f$%kills%'
+        - '&b#%position% &f%clan% &7- &f%kills% Kills'
