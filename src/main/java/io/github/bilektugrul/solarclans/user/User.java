@@ -1,6 +1,7 @@
 package io.github.bilektugrul.solarclans.user;
 
 import io.github.bilektugrul.solarclans.SolarClans;
+import io.github.bilektugrul.solarclans.clan.Clan;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -21,6 +22,7 @@ public class User {
 
     private long clanID = -1;
     private boolean clanChat;
+    private Clan clan;
 
     public User(YamlConfiguration data, String name) {
         this.data = data;
@@ -46,8 +48,15 @@ public class User {
         return clanID;
     }
 
+    public Clan getClan() {
+        return clan;
+    }
+
     public void setClanID(long clanID) {
         this.clanID = clanID;
+        if (clanID != -1) {
+            this.clan = plugin.getClanManager().getClan(clanID);
+        }
     }
 
     public Player getPlayer() {

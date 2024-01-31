@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -83,6 +84,17 @@ public class PlayerListener implements Listener {
                 e.setCancelled(!c.isPvPEnabled());
             }
         }
+    }
+
+    @EventHandler
+    public void onDeath(PlayerDeathEvent e) {
+        Player attacker = e.getEntity().getKiller();
+        if (attacker == null) return;
+
+        User attackerUser = userManager.getUser(attacker);
+        if (!attackerUser.hasClan()) return;
+
+        Clan attackerClan = attackerUser.getClan();
     }
 
 }

@@ -3,10 +3,10 @@ package io.github.bilektugrul.solarclans.placeholder;
 import com.avaje.ebean.validation.NotNull;
 import io.github.bilektugrul.solarclans.SolarClans;
 import io.github.bilektugrul.solarclans.leaderboard.BalanceLeaderboard;
+import io.github.bilektugrul.solarclans.user.User;
 import io.github.bilektugrul.solarclans.user.UserManager;
 import io.github.bilektugrul.solarclans.util.Utils;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 public class PAPIPlaceholders extends PlaceholderExpansion {
@@ -56,6 +56,14 @@ public class PAPIPlaceholders extends PlaceholderExpansion {
             }
 
             return "";
+        }
+
+        User user = (User) player.getMetadata("clans-user");
+
+        if (identifier.equalsIgnoreCase("clan")) {
+            if (!user.hasClan()) return "";
+
+            return user.getClan().getName();
         }
 
         return "";

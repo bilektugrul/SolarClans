@@ -26,6 +26,8 @@ public class Clan {
     private final List<String> members = new ArrayList<>();
     private final List<Player> onlineMembers = new ArrayList<>();
 
+    private int kills = 0;
+
     public Clan(YamlConfiguration data, long ID) {
         this.data = data;
 
@@ -87,6 +89,16 @@ public class Clan {
         return this;
     }
 
+    public Clan setKills(int kills) {
+        this.kills = kills;
+
+        return this;
+    }
+
+    public void addKill() {
+        kills++;
+    }
+
     public void updateOnlineMembers() {
         onlineMembers.clear();
 
@@ -117,6 +129,7 @@ public class Clan {
         data.set("owner", owner);
         data.set("creator", creator);
         data.set("members", members);
+        data.set("kills", kills);
 
         data.save(new File(plugin.getDataFolder() + "/clans/" + ID + ".yml"));
     }

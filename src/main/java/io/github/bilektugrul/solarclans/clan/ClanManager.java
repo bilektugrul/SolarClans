@@ -55,13 +55,15 @@ public class ClanManager {
         String name = clanFile.getString("name");
         String owner = clanFile.getString("owner");
         String creator = clanFile.getString("creator");
+        int kills = clanFile.getInt("kills");
         List<String> members = clanFile.getStringList("members");
 
         Clan clan = new Clan(clanFile, id)
                 .setName(name)
                 .addMembers(members)
                 .setOwner(owner)
-                .setCreator(creator);
+                .setCreator(creator)
+                .setKills(kills);
         clans.add(clan);
         clan.updateOnlineMembers();
     }
@@ -86,7 +88,8 @@ public class ClanManager {
                 .setName(name)
                 .addMembers(owner.getName())
                 .setCreator(owner.getName())
-                .setOwner(owner.getName());
+                .setOwner(owner.getName())
+                .setKills(0);
         userManager.getUser(owner).setClanID(id);
         clans.add(clan);
         clan.updateOnlineMembers();

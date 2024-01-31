@@ -5,6 +5,8 @@ import io.github.bilektugrul.solarclans.SolarClans;
 import io.github.bilektugrul.solarclans.clan.Clan;
 import io.github.bilektugrul.solarclans.clan.ClanManager;
 import io.github.bilektugrul.solarclans.leaderboard.BalanceLeaderboard;
+import io.github.bilektugrul.solarclans.leaderboard.KillLeaderboard;
+import io.github.bilektugrul.solarclans.leaderboard.LeaderboardEntry;
 import io.github.bilektugrul.solarclans.user.User;
 import io.github.bilektugrul.solarclans.user.UserManager;
 import io.github.bilektugrul.solarclans.util.Utils;
@@ -533,11 +535,29 @@ public class PlayerCommands extends AbstractCommand {
             String format = Utils.getMessage("leaderboard.balance.format", sender);
 
             int pos = 1;
-            for (BalanceLeaderboard.LeaderboardEntry entry : BalanceLeaderboard.clanBalanceLeaderboard) {
+            for (LeaderboardEntry entry : BalanceLeaderboard.clanBalanceLeaderboard) {
                 balanceMessage.append(format
                         .replace("%position%", String.valueOf(pos++))
-                        .replace("%clan%", entry.getName())
-                        .replace("%balance%", Utils.moneyWithCommas(entry.getValue())))
+                        .replace("%clan%", entry.name())
+                        .replace("%balance%", Utils.moneyWithCommas(entry.value())))
+                        .append('\n');
+                if (pos == 11) break;
+            }
+
+            sender.sendMessage(balanceMessage.toString());
+            return;
+        }
+
+        if (mode.contains("kill")) {
+            StringBuilder balanceMessage = new StringBuilder(Utils.getMessage("leaderboard.kills.message", sender)).append('\n');
+            String format = Utils.getMessage("leaderboard.kills.format", sender);
+
+            int pos = 1;
+            for (LeaderboardEntry entry : KillLeaderboard.killLeaderboard) {
+                balanceMessage.append(format
+                                .replace("%position%", String.valueOf(pos++))
+                                .replace("%clan%", entry.name())
+                                .replace("%balance%", String.valueOf(entry.value())))
                         .append('\n');
                 if (pos == 11) break;
             }

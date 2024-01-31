@@ -13,41 +13,35 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class BalanceLeaderboard {
+public class KillLeaderboard {
 
     private static final SolarClans plugin = JavaPlugin.getPlugin(SolarClans.class);
-    private static final Economy economy = plugin.getVaultManager().getEconomy();
 
-    public static List<LeaderboardEntry> clanBalanceLeaderboard = new ArrayList<>();
+    public static List<LeaderboardEntry> killLeaderboard = new ArrayList<>();
 
     public static void reloadLeaderboard() {
         File base = new File(plugin.getDataFolder() + "/clans/");
         File[] clanFiles = base.listFiles();
         if (clanFiles == null) return;
 
-        clanBalanceLeaderboard.clear();
+        killLeaderboard.clear();
 
         for (File clanFile : clanFiles) {
             if (clanFile.getName().contains("-disbanded")) continue;
 
             FileConfiguration data = YamlConfiguration.loadConfiguration(clanFile);
 
-            long totalBalance = 0;
+            int kills = data.getInt("kills");
             String name = data.getString("name");
-            List<String> members = data.getStringList("members");
 
-            for (String member : members) {
-                totalBalance += (long) economy.getBalance(Bukkit.getOfflinePlayer(member));
-            }
-
-            clanBalanceLeaderboard.add(new LeaderboardEntry(name, totalBalance));
+            killLeaderboard.add(new LeaderboardEntry(name, kills));
         }
 
         sort();
     }
 
     private static void sort() {
-        clanBalanceLeaderboard = clanBalanceLeaderboard
+        killLeaderboard = killLeaderboard
                 .stream()
                 .sorted(Comparator.comparingLong(LeaderboardEntry::value).reversed())
                 .collect(Collectors.toList());

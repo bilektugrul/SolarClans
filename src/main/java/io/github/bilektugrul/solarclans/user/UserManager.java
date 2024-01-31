@@ -4,6 +4,7 @@ import io.github.bilektugrul.solarclans.SolarClans;
 import io.github.bilektugrul.solarclans.clan.ClanManager;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.metadata.FixedMetadataValue;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,19 +24,22 @@ public class UserManager {
     }
 
     public User loadUser(Player p) {
-        return loadUser(p.getName(), true);
+        return loadUser(p, true);
     }
 
-    public User loadUser(String name, boolean keep) {
+    public User loadUser(Player p, boolean keep) {
+        String name = p.getName();
         YamlConfiguration dataFile = YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder() + "/players/" + name + ".yml"));
         User user = new User(dataFile, name);
-        if (keep) userList.add(user);
+        if (keep) {
+            userList.add(user);
+            p.setMetadata("clans-user", new FixedMetadataValue(plugin, user));
+        }
         return user;
     }
 
     public User getUser(Player p) {
-        String name = p.getName();
-        return getUser(name);
+        return (User) p.getMetadata("clans-user");
     }
 
     public User getUser(String name) {
