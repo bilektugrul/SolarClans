@@ -191,3 +191,6 @@ messages:
         - '&7Position - Clan Name - Kills'
       format:
         - '&b#%position% &f%clan% &7- &f%kills% Kills'
+
+  vault-chest-name:
+    - '&1Clan Vault'

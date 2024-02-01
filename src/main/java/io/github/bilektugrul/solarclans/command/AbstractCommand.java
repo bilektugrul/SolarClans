@@ -43,5 +43,6 @@ public abstract class AbstractCommand {
     public static void registerCommands(SolarClans plugin) {
         new PlayerCommands(plugin);
         new AdminCommands(plugin);
+        new VaultCommand(plugin);
     }
 }

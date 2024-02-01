@@ -123,6 +123,10 @@ public class Clan {
         return Utils.millisToString(ID);
     }
 
+    public YamlConfiguration getData() {
+        return data;
+    }
+
     public boolean isPvPEnabled() {
         return pvp;
     }

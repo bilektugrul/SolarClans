@@ -35,7 +35,7 @@ public class AdminCommands extends AbstractCommand {
     @Command(
             name = "clan.reloadleaderboard",
             aliases = {"c.rl", "clans.rl", "clans.reloadleaderboard"},
-            desc = "Clans reload command",
+            desc = "Clans reload leaderboard command",
             senderType = Command.SenderType.BOTH
     )
     public void reloadLeaderboardCommand(CommandArguments arguments) {

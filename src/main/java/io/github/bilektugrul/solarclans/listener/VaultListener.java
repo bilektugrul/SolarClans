@@ -1,0 +1,63 @@
+package io.github.bilektugrul.solarclans.listener;
+
+import io.github.bilektugrul.solarclans.SolarClans;
+import io.github.bilektugrul.solarclans.clan.Clan;
+import io.github.bilektugrul.solarclans.user.User;
+import io.github.bilektugrul.solarclans.user.UserManager;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+
+public class VaultListener implements Listener {
+
+    private final SolarClans plugin;
+    private final UserManager userManager;
+
+    public VaultListener(SolarClans plugin) {
+        this.plugin = plugin;
+        this.userManager = plugin.getUserManager();
+    }
+
+    @EventHandler
+    public void onInventoryClose(InventoryCloseEvent e) {
+        Player player = (Player) e.getPlayer();
+        User user = userManager.getUser(player);
+
+        if (!user.hasClan()) return;
+        if (!player.hasMetadata("clans-vault-open")) return;
+
+        player.removeMetadata("clans-vault-open", plugin);
+
+        Clan clan = user.getClan();
+        YamlConfiguration data = clan.getData();
+        Inventory inventory = e.getInventory();
+        if (inventory.getContents().length == 0) {
+            data.set("vault", null);
+            return;
+        }
+
+        if (data.getConfigurationSection("vault") != null) {
+            for (String slot : data.getConfigurationSection("vault").getKeys(false)) {
+                int slotInt = Integer.parseInt(slot);
+
+                if (inventory.getItem(slotInt) == null) data.set("vault." + slot, null);
+            }
+        }
+
+        int slot = 0;
+        for (ItemStack item : inventory.getContents()) {
+            if (item == null) {
+                slot++;
+                continue;
+            }
+
+            data.set("vault." + slot, item);
+            slot++;
+        }
+    }
+
+}

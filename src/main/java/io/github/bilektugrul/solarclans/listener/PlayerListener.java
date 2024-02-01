@@ -19,17 +19,22 @@ import java.io.IOException;
 
 public class PlayerListener implements Listener {
 
+    private final SolarClans plugin;
     private final UserManager userManager;
     private final ClanManager clanManager;
 
     public PlayerListener(SolarClans plugin) {
+        this.plugin = plugin;
         this.userManager = plugin.getUserManager();
         this.clanManager = plugin.getClanManager();
     }
 
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
-        User user = userManager.loadUser(e.getPlayer());
+        Player player = e.getPlayer();
+        player.removeMetadata("clans-vault-open", plugin);
+
+        User user = userManager.loadUser(player);
         Clan clan = clanManager.getClan(user.getClanID());
         if (clan == null) return;
 

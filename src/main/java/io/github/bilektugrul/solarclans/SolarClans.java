@@ -8,6 +8,7 @@ import io.github.bilektugrul.solarclans.economy.VaultManager;
 import io.github.bilektugrul.solarclans.leaderboard.BalanceLeaderboard;
 import io.github.bilektugrul.solarclans.leaderboard.KillLeaderboard;
 import io.github.bilektugrul.solarclans.listener.PlayerListener;
+import io.github.bilektugrul.solarclans.listener.VaultListener;
 import io.github.bilektugrul.solarclans.placeholder.PAPIPlaceholders;
 import io.github.bilektugrul.solarclans.user.UserManager;
 import me.despical.commandframework.CommandFramework;
@@ -43,6 +44,7 @@ public final class SolarClans extends JavaPlugin {
         AbstractCommand.registerCommands(this);
 
         getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
+        getServer().getPluginManager().registerEvents(new VaultListener(this), this);
         new PAPIPlaceholders(this).register();
 
         HCore.asyncScheduler()
