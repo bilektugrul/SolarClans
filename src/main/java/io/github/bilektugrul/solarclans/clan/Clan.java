@@ -30,7 +30,6 @@ public class Clan {
 
     public Clan(YamlConfiguration data, long ID) {
         this.data = data;
-
         this.ID = ID;
     }
 
@@ -70,7 +69,6 @@ public class Clan {
         return this;
     }
 
-
     public Clan setOwner(String owner) {
         this.owner = owner;
 
@@ -91,6 +89,12 @@ public class Clan {
 
     public Clan setKills(int kills) {
         this.kills = kills;
+
+        return this;
+    }
+
+    public Clan setPvP(boolean pvp) {
+        this.pvp = pvp;
 
         return this;
     }
@@ -130,10 +134,11 @@ public class Clan {
     public void save() throws IOException {
         data.set("ID", ID);
         data.set("name", name);
-        data.set("owner", owner);
         data.set("creator", creator);
-        data.set("members", members);
+        data.set("owner", owner);
+        data.set("pvp", pvp);
         data.set("kills", kills);
+        data.set("members", members);
 
         data.save(new File(plugin.getDataFolder() + "/clans/" + ID + ".yml"));
     }

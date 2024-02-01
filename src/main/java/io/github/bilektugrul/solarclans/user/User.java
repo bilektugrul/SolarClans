@@ -29,7 +29,7 @@ public class User {
         this.name = name;
 
         if (data.isSet("clanID")) {
-            this.clanID = data.getLong("clanID");
+            setClanID(data.getLong("clanID"));
 
             if (!plugin.getClanManager().isClanActive(clanID)) {
                 this.clanID = -1;
@@ -54,6 +54,7 @@ public class User {
 
     public void setClanID(long clanID) {
         this.clanID = clanID;
+
         if (clanID != -1) {
             this.clan = plugin.getClanManager().getClan(clanID);
         }

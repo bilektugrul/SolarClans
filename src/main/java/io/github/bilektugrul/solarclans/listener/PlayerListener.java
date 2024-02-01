@@ -94,11 +94,12 @@ public class PlayerListener implements Listener {
         User attackerUser = userManager.getUser(attacker);
         if (!attackerUser.hasClan()) return;
 
-        Clan attackerClan = attackerUser.getClan();
-        Clan victimClan = userManager.getUser(e.getEntity()).getClan();
-        if (attackerClan.getID() == victimClan.getID()) return;
+        User victimUser = userManager.getUser(e.getEntity());
+        if (victimUser.hasClan() && attackerUser.getClanID() == victimUser.getClanID()) {
+            return;
+        }
 
-        attackerClan.addKill();
+        attackerUser.getClan().addKill();
     }
 
 }

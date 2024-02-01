@@ -39,7 +39,7 @@ public class UserManager {
     }
 
     public User getUser(Player p) {
-        return (User) p.getMetadata("clans-user");
+        return (User) p.getMetadata("clans-user").get(0).value();
     }
 
     public User getUser(String name) {

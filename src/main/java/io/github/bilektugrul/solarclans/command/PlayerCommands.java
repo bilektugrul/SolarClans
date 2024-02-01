@@ -55,7 +55,7 @@ public class PlayerCommands extends AbstractCommand {
 
     @Command(
             name = "clan.create",
-            aliases = {"c.c", "clans.c", "clans.create"},
+            aliases = {"c.create", "c.c", "clans.c", "clans.create"},
             desc = "Clans main command",
             min = 1,
             max = 1,
@@ -114,7 +114,7 @@ public class PlayerCommands extends AbstractCommand {
 
     @Command(
             name = "clan.invite",
-            aliases = {"c.inv", "clans.inv", "clans.invite"},
+            aliases = {"c.invite", "c.inv", "clans.inv", "clans.invite"},
             min = 1,
             max = 1,
             desc = "Clans invite command",
@@ -190,7 +190,7 @@ public class PlayerCommands extends AbstractCommand {
 
     @Command(
             name = "clan.join",
-            aliases = {"c.j", "clans.join", "clans.j"},
+            aliases = {"c.join", "c.j", "clans.join", "clans.j"},
             min = 1,
             max = 1,
             desc = "Clans join command",
@@ -226,7 +226,7 @@ public class PlayerCommands extends AbstractCommand {
 
     @Command(
             name = "clan.leave",
-            aliases = {"c.l", "clans.leave", "clans.l"},
+            aliases = {"c.leave", "c.l", "clans.leave", "clans.l"},
             desc = "Clans leave command",
             senderType = Command.SenderType.PLAYER
     )
@@ -260,7 +260,7 @@ public class PlayerCommands extends AbstractCommand {
 
     @Command(
             name = "clan.kick",
-            aliases = {"c.k", "clans.k", "clans.kick"},
+            aliases = {"c.kick", "c.k", "clans.k", "clans.kick"},
             desc = "Clans kick command",
             min = 1,
             max = 1,
@@ -310,7 +310,7 @@ public class PlayerCommands extends AbstractCommand {
 
     @Command(
             name = "clan.disband",
-            aliases = {"c.d", "clans.disband", "clans.d"},
+            aliases = {"c.disband", "c.d", "clans.disband", "clans.d"},
             desc = "Clans disband command",
             senderType = Command.SenderType.PLAYER
     )
@@ -344,7 +344,7 @@ public class PlayerCommands extends AbstractCommand {
 
     @Command(
             name = "clan.chat",
-            aliases = {"c.c", "clans.c", "clans.chat"},
+            aliases = {"c.chat", "c.c", "clans.c", "clans.chat"},
             desc = "Clans chat command",
             senderType = Command.SenderType.PLAYER
     )
@@ -363,9 +363,8 @@ public class PlayerCommands extends AbstractCommand {
 
     @Command(
             name = "clan.info",
-            aliases = {"c.i", "clans.i", "clans.info"},
+            aliases = {"c.info", "c.i", "clans.i", "clans.info"},
             desc = "Clans info command",
-            cooldown = 10,
             senderType = Command.SenderType.PLAYER
     )
     public void infoCommand(CommandArguments arguments) {
@@ -407,7 +406,7 @@ public class PlayerCommands extends AbstractCommand {
 
     @Command(
             name = "clan.setleader",
-            aliases = {"c.sl", "clans.sl", "clans.setleader"},
+            aliases = {"c.setleader", "c.sl", "clans.sl", "clans.setleader"},
             desc = "Clans set leader command",
             min = 1,
             max = 1,
@@ -465,7 +464,7 @@ public class PlayerCommands extends AbstractCommand {
 
     @Command(
             name = "clan.rename",
-            aliases = {"c.rn", "clans.rn", "clans.rename"},
+            aliases = {"c.rename", "c.rn", "clans.rn", "clans.rename"},
             desc = "Clans rename command",
             min = 1,
             max = 1,
@@ -493,7 +492,7 @@ public class PlayerCommands extends AbstractCommand {
 
     @Command(
             name = "clan.pvp",
-            aliases = {"c.p", "clans.p", "clans.pvp"},
+            aliases = {"c.pvp", "c.p", "clans.p", "clans.pvp"},
             desc = "Clans pvp command",
             senderType = Command.SenderType.PLAYER
     )
