@@ -344,7 +344,7 @@ public class PlayerCommands extends AbstractCommand {
 
     @Command(
             name = "clan.chat",
-            aliases = {"c.chat", "c.c", "clans.c", "clans.chat"},
+            aliases = {"c.chat", "c.ch", "clans.ch", "clans.chat"},
             desc = "Clans chat command",
             senderType = Command.SenderType.PLAYER
     )

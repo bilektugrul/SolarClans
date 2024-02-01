@@ -4,10 +4,12 @@ import io.github.bilektugrul.solarclans.SolarClans;
 import io.github.bilektugrul.solarclans.clan.Clan;
 import io.github.bilektugrul.solarclans.user.User;
 import io.github.bilektugrul.solarclans.user.UserManager;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -58,6 +60,17 @@ public class VaultListener implements Listener {
             data.set("vault." + slot, item);
             slot++;
         }
+    }
+
+    @EventHandler
+    public void onInventoryClick(InventoryClickEvent e) {
+        Player player = (Player) e.getWhoClicked();
+        if (!player.hasMetadata("clans-vault-open")) return;
+
+        User user = userManager.getUser(player);
+        Clan clan = user.getClan();
+
+        plugin.getServer().getScheduler().runTask(plugin, () -> clan.getData().set("vault." + e.getSlot(), null));
     }
 
 }

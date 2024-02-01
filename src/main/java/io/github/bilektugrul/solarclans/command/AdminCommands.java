@@ -1,8 +1,6 @@
 package io.github.bilektugrul.solarclans.command;
 
 import io.github.bilektugrul.solarclans.SolarClans;
-import io.github.bilektugrul.solarclans.leaderboard.BalanceLeaderboard;
-import io.github.bilektugrul.solarclans.leaderboard.KillLeaderboard;
 import io.github.bilektugrul.solarclans.util.Utils;
 import me.despical.commandframework.Command;
 import me.despical.commandframework.CommandArguments;
@@ -16,7 +14,7 @@ public class AdminCommands extends AbstractCommand {
 
     @Command(
             name = "clan.reload",
-            aliases = {"c.r", "c.reload"},
+            aliases = {"c.r", "c.reload", "clans.reload", "clans.r"},
             desc = "Clans reload command",
             senderType = Command.SenderType.BOTH
     )
@@ -34,7 +32,7 @@ public class AdminCommands extends AbstractCommand {
 
     @Command(
             name = "clan.reloadleaderboard",
-            aliases = {"c.rl", "clans.rl", "clans.reloadleaderboard"},
+            aliases = {"c.rl", "c.reloadleaderboard", "clans.rl", "clans.reloadleaderboard"},
             desc = "Clans reload leaderboard command",
             senderType = Command.SenderType.BOTH
     )
@@ -46,9 +44,26 @@ public class AdminCommands extends AbstractCommand {
             return;
         }
 
-        BalanceLeaderboard.reloadLeaderboard();
-        KillLeaderboard.reloadLeaderboard();
+        plugin.saveAndReloadLeaderboards();
         sender.sendMessage(Utils.getMessage("reloaded-leaderboard", sender));
+    }
+
+    @Command(
+            name = "clan.save",
+            aliases = {"c.save", "c.reload", "clans.save"},
+            desc = "Clans reload command",
+            senderType = Command.SenderType.BOTH
+    )
+    public void saveCommand(CommandArguments arguments) {
+        CommandSender sender = arguments.getSender();;
+
+        if (!sender.hasPermission("clans.admin")) {
+            sender.sendMessage(Utils.getMessage("no-permission", sender));
+            return;
+        }
+
+        plugin.save();
+        sender.sendMessage(Utils.getMessage("saved", sender));
     }
 
 }

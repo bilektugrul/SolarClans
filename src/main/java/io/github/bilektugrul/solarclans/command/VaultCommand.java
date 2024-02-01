@@ -32,7 +32,8 @@ public class VaultCommand extends AbstractCommand {
             return;
         }
 
-        Inventory inventory = plugin.getServer().createInventory(null, 6 * 9, Utils.getMessage("vault-chest-name", player));
+        Inventory inventory = plugin.getServer().createInventory(null, 6 * 9, Utils.getMessage("vault-chest-name", player)
+                .replace("%clan%", user.getClan().getName()));
         player.openInventory(inventory);
         player.setMetadata("clans-vault-open", new FixedMetadataValue(plugin, true));
         YamlConfiguration data = user.getClan().getData();

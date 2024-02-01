@@ -1,3 +1,4 @@
+save-interval: 5 # in minutes, saves data and reloads leaderboards
 new-clan-cost: 1000
 minimum-name-length: 3
 maximum-name-length: 9
@@ -8,6 +9,8 @@ messages:
     - '%prefix% &eConfig reloaded.'
   reloaded-leaderboard:
     - '%prefix% &eLeaderboards reloaded.'
+  saved:
+    - '%prefix% &eUsers and clans data saved.'
   no-permission:
     - '%prefix% &cI''m sorry but you do not have the permission to do that.'
 
@@ -16,6 +19,7 @@ messages:
     - ' &f/clan create <clan name> &6| &eCreates a new clan with provided name, it costs &f$%cost%&e.'
     - ' &f/clan join <clan name> &6| &eJoins the provided clan if they have sent you an invite.'
     - ' &f/clan leave &6| &eLeaves your current clan.'
+    - ' &f/clan top <kills / balance> &6| &eShows kill or balance leaderboard of clans.'
     - ' '
     - ' &f/clan info [<clan name>] &6| &eSends info about provided clan. '
     - ' &f/clan vault &6| &eOpens your clan''s vault. You can store everything in it.'
@@ -193,4 +197,4 @@ messages:
         - '&b#%position% &f%clan% &7- &f%kills% Kills'
 
   vault-chest-name:
-    - '&1Clan Vault'
+    - '&1Clan Vault &7- &1%clan%'

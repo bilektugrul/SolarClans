@@ -2,7 +2,9 @@ package io.github.bilektugrul.solarclans.placeholder;
 
 import com.avaje.ebean.validation.NotNull;
 import io.github.bilektugrul.solarclans.SolarClans;
+import io.github.bilektugrul.solarclans.clan.Clan;
 import io.github.bilektugrul.solarclans.leaderboard.BalanceLeaderboard;
+import io.github.bilektugrul.solarclans.leaderboard.KillLeaderboard;
 import io.github.bilektugrul.solarclans.user.User;
 import io.github.bilektugrul.solarclans.user.UserManager;
 import io.github.bilektugrul.solarclans.util.Utils;
@@ -58,12 +60,49 @@ public class PAPIPlaceholders extends PlaceholderExpansion {
             return "";
         }
 
-        User user = (User) player.getMetadata("clans-user");
+        if (identifier.contains("leaderboard_kills")) {
+            String replaced = identifier.replace("leaderboard_kills", "");
 
+            int place = Integer.parseInt(replaced.substring(replaced.indexOf("_") + 1, replaced.lastIndexOf("_")));
+            place--;
+
+            if (place >= KillLeaderboard.killLeaderboard.size()) return "";
+
+            if (identifier.endsWith("name")) {
+                return KillLeaderboard.killLeaderboard.get(place).name();
+            } else if (identifier.endsWith("kills")) {
+                return String.valueOf(KillLeaderboard.killLeaderboard.get(place).value());
+            }
+
+            return "";
+        }
+
+        User user = userManager.getUser(player);
+        if (!user.hasClan()) return "";
+
+        Clan clan = user.getClan();
         if (identifier.equalsIgnoreCase("clan")) {
-            if (!user.hasClan()) return "";
+            return clan.getName();
+        }
 
-            return user.getClan().getName();
+        if (identifier.equalsIgnoreCase("members")) {
+            return String.valueOf(clan.getMembers().size());
+        }
+
+        if (identifier.equalsIgnoreCase("online_members")) {
+            return String.valueOf(clan.getOnlineMembers().size());
+        }
+
+        if (identifier.equalsIgnoreCase("owner")) {
+            return clan.getOwner();
+        }
+
+        if (identifier.equalsIgnoreCase("creator")) {
+            return clan.getCreator();
+        }
+
+        if (identifier.equalsIgnoreCase("kills")) {
+            return String.valueOf(clan.getKills());
         }
 
         return "";
