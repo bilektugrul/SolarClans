@@ -14,6 +14,8 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import java.io.IOException;
+
 public class VaultListener implements Listener {
 
     private final SolarClans plugin;
@@ -30,11 +32,16 @@ public class VaultListener implements Listener {
         User user = userManager.getUser(player);
 
         if (!user.hasClan()) return;
-        if (!player.hasMetadata("clans-vault-open")) return;
+        if (!(player.hasMetadata("clans-vault-open") || player.hasMetadata("clans-admin-vault-open"))) return;
 
         player.removeMetadata("clans-vault-open", plugin);
 
         Clan clan = user.getClan();
+        if (player.hasMetadata("clans-admin-vault-open")) {
+            clan = (Clan) player.getMetadata("clans-admin-vault-open").get(0).value();
+            player.removeMetadata("clans-admin-vault-open", plugin);
+        }
+
         YamlConfiguration data = clan.getData();
         Inventory inventory = e.getInventory();
         if (inventory.getContents().length == 0) {
@@ -60,17 +67,29 @@ public class VaultListener implements Listener {
             data.set("vault." + slot, item);
             slot++;
         }
+
+        if (clan.isDisbanded()) {
+            try {
+                clan.save();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        }
     }
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
         Player player = (Player) e.getWhoClicked();
-        if (!player.hasMetadata("clans-vault-open")) return;
+        if (!player.hasMetadata("clans-vault-open") || !player.hasMetadata("clans-admin-vault-open")) return;
 
         User user = userManager.getUser(player);
         Clan clan = user.getClan();
+        if (player.hasMetadata("clans-admin-vault-open")) {
+            clan = (Clan) player.getMetadata("clans-admin-vault-open").get(0).value();
+        }
 
-        plugin.getServer().getScheduler().runTask(plugin, () -> clan.getData().set("vault." + e.getSlot(), null));
+        Clan finalClan = clan;
+        plugin.getServer().getScheduler().runTask(plugin, () -> finalClan.getData().set("vault." + e.getSlot(), null));
     }
 
 }

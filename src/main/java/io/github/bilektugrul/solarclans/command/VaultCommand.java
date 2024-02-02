@@ -1,6 +1,7 @@
 package io.github.bilektugrul.solarclans.command;
 
 import io.github.bilektugrul.solarclans.SolarClans;
+import io.github.bilektugrul.solarclans.clan.Clan;
 import io.github.bilektugrul.solarclans.user.User;
 import io.github.bilektugrul.solarclans.util.Utils;
 import me.despical.commandframework.Command;
@@ -20,7 +21,7 @@ public class VaultCommand extends AbstractCommand {
     @Command(
             name = "clan.vault",
             aliases = {"c.vault", "c.v", "clans.v", "clans.vault"},
-            desc = "Clans kick command",
+            desc = "Clans vault command",
             senderType = Command.SenderType.PLAYER
     )
     public void vaultCommand(CommandArguments arguments) {
@@ -37,6 +38,45 @@ public class VaultCommand extends AbstractCommand {
         player.openInventory(inventory);
         player.setMetadata("clans-vault-open", new FixedMetadataValue(plugin, true));
         YamlConfiguration data = user.getClan().getData();
+
+        if (data.getConfigurationSection("vault") != null) {
+            for (String slot : data.getConfigurationSection("vault").getKeys(false)) {
+                int slotInt = Integer.parseInt(slot);
+
+                ItemStack item = data.getItemStack("vault." + slot);
+                inventory.setItem(slotInt, item);
+            }
+        }
+    }
+
+    @Command(
+            name = "clan.admin.vault",
+            aliases = {"c.admin.vault", "c.admin.v", "clans.admin.v", "clans.admin.vault"},
+            allowInfiniteArgs = true,
+            desc = "Clans admin vault command",
+            senderType = Command.SenderType.PLAYER
+    )
+    public void vaultAdminCommand(CommandArguments arguments) {
+        Player player = arguments.getSender();
+        String arg = arguments.getArgument(0);
+
+        Clan clan;
+        if (arguments.getArgumentsLength() == 2) {
+            clan = clanManager.getDisbandedClan(arg);
+        } else {
+            clan = clanManager.getClan(arg);
+        }
+
+        if (clan == null) {
+            player.sendMessage(Utils.getMessage("clan-not-available", player));
+            return;
+        }
+
+        Inventory inventory = plugin.getServer().createInventory(null, 6 * 9, Utils.getMessage("vault-chest-name", player)
+                .replace("%clan%", clan.getName()));
+        player.openInventory(inventory);
+        player.setMetadata("clans-admin-vault-open", new FixedMetadataValue(plugin, clan));
+        YamlConfiguration data = clan.getData();
 
         if (data.getConfigurationSection("vault") != null) {
             for (String slot : data.getConfigurationSection("vault").getKeys(false)) {
