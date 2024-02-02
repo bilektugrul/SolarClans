@@ -33,11 +33,17 @@ public class VaultCommand extends AbstractCommand {
             return;
         }
 
-        Inventory inventory = plugin.getServer().createInventory(null, 6 * 9, Utils.getMessage("vault-chest-name", player)
-                .replace("%clan%", user.getClan().getName()));
+        Clan clan = user.getClan();
+        Inventory inventory = clan.getVaultInventory();
+        if (inventory == null) {
+            inventory = plugin.getServer().createInventory(null, 6 * 9, Utils.getMessage("vault-chest-name", player)
+                    .replace("%clan%", clan.getName()));
+            clan.setVaultInventory(inventory);
+        }
+
         player.openInventory(inventory);
         player.setMetadata("clans-vault-open", new FixedMetadataValue(plugin, true));
-        YamlConfiguration data = user.getClan().getData();
+        YamlConfiguration data = clan.getData();
 
         if (data.getConfigurationSection("vault") != null) {
             for (String slot : data.getConfigurationSection("vault").getKeys(false)) {
@@ -72,8 +78,13 @@ public class VaultCommand extends AbstractCommand {
             return;
         }
 
-        Inventory inventory = plugin.getServer().createInventory(null, 6 * 9, Utils.getMessage("vault-chest-name", player)
-                .replace("%clan%", clan.getName()));
+        Inventory inventory = clan.getVaultInventory();
+        if (inventory == null) {
+            inventory = plugin.getServer().createInventory(null, 6 * 9, Utils.getMessage("vault-chest-name", player)
+                    .replace("%clan%", clan.getName()));
+            clan.setVaultInventory(inventory);
+        }
+
         player.openInventory(inventory);
         player.setMetadata("clans-admin-vault-open", new FixedMetadataValue(plugin, clan));
         YamlConfiguration data = clan.getData();

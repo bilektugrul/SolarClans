@@ -5,6 +5,7 @@ import io.github.bilektugrul.solarclans.util.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -27,6 +28,7 @@ public class Clan {
     private final List<Player> onlineMembers = new ArrayList<>();
 
     private int kills = 0;
+    private Inventory vaultInventory;
 
     public Clan(YamlConfiguration data, long ID) {
         this.data = data;
@@ -97,6 +99,14 @@ public class Clan {
         this.pvp = pvp;
 
         return this;
+    }
+
+    public void setVaultInventory(Inventory vaultInventory) {
+        this.vaultInventory = vaultInventory;
+    }
+
+    public Inventory getVaultInventory() {
+        return vaultInventory;
     }
 
     public void addKill() {
