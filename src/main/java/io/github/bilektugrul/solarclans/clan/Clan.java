@@ -119,6 +119,12 @@ public class Clan {
         }
     }
 
+    public void sendMessage(String message) {
+        for (Player player : onlineMembers) {
+            player.sendMessage(message);
+        }
+    }
+
     public String getCreationDate() {
         return Utils.millisToString(ID);
     }
@@ -135,6 +141,10 @@ public class Clan {
         this.pvp = !this.pvp;
     }
 
+    public boolean isDisbanded() {
+        return data.getBoolean("disbanded");
+    }
+
     public void save() throws IOException {
         data.set("ID", ID);
         data.set("name", name);
@@ -144,7 +154,8 @@ public class Clan {
         data.set("kills", kills);
         data.set("members", members);
 
-        data.save(new File(plugin.getDataFolder() + "/clans/" + ID + ".yml"));
+        if (isDisbanded()) data.save(new File(plugin.getDataFolder() + "/clans/" + ID + "-disbanded.yml"));
+        else data.save(new File(plugin.getDataFolder() + "/clans/" + ID + ".yml"));
     }
 
 }

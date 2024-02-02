@@ -3,52 +3,39 @@ package io.github.bilektugrul.solarclans.command;
 import com.hakan.core.HCore;
 import io.github.bilektugrul.solarclans.SolarClans;
 import io.github.bilektugrul.solarclans.clan.Clan;
-import io.github.bilektugrul.solarclans.clan.ClanManager;
 import io.github.bilektugrul.solarclans.leaderboard.BalanceLeaderboard;
 import io.github.bilektugrul.solarclans.leaderboard.KillLeaderboard;
 import io.github.bilektugrul.solarclans.leaderboard.LeaderboardEntry;
 import io.github.bilektugrul.solarclans.user.User;
-import io.github.bilektugrul.solarclans.user.UserManager;
 import io.github.bilektugrul.solarclans.util.Utils;
 import me.despical.commandframework.Command;
 import me.despical.commandframework.CommandArguments;
-import me.despical.commandframework.CommandFramework;
-import me.despical.commons.string.StringMatcher;
-import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 public class PlayerCommands extends AbstractCommand {
 
-    private final Economy economy;
 
     public PlayerCommands(SolarClans plugin) {
         super(plugin);
-
-        this.economy = plugin.getVaultManager().getEconomy();
     }
 
     @Command(
             name = "clan",
-            aliases = {"c", "clans"},
-            desc = "Clans main command",
-            allowInfiniteArgs = true,
-            senderType = Command.SenderType.BOTH
+            aliases = {"c", "clans", "c.help", "clans.help", "clan.help"},
+            desc = "Clans main command"
     )
     public void mainCommand(CommandArguments arguments) {
-        if (!arguments.isArgumentsEmpty()) return;
+        CommandSender sender = arguments.getSender();
 
-        if (arguments.getSender() instanceof Player player) {
-            long cost = Utils.getLong("new-clan-cost");
-            player.sendMessage(Utils.getMessage("main-command", player).replace("%cost%", String.valueOf(cost)));
-        }
+        long cost = Utils.getLong("new-clan-cost");
+        sender.sendMessage(Utils.getMessage("main-command", sender)
+                .replace("%cost%", String.valueOf(cost)));
     }
 
     private final Set<Player> createConfirmWaiting = new HashSet<>();
@@ -378,6 +365,7 @@ public class PlayerCommands extends AbstractCommand {
 
         Clan clan = clanManager.getClan(user.getClanID());
         String infoMessage = Utils.getMessage("clan-info", player)
+                .replace("%id%", String.valueOf(clan.getID()))
                 .replace("%name%", clan.getName())
                 .replace("%creator%", clan.getCreator())
                 .replace("%owner%", clan.getOwner())

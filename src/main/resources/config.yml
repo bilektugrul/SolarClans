@@ -33,6 +33,21 @@ messages:
     - ' &f/clan pvp <on / off> &6| &eToggles PvP between clan members.'
     - ' '
 
+  admin-help-command:
+    - '%prefix% '
+    - ' &f/clan reload <clan name> &6| &eReloads config.'
+    - ' &f/clan save &6| &eSaves player and clan data.'
+    - ' &f/clan rl &6| &eReloads leaderboards.'
+    - ' '
+    - ' &f/clan admin addmember <player> <clan> &6| &eAdds player to provided clan.'
+    - ' &f/clan admin kick <player> &6| &eKicks provided player from their clan.'
+    - ' &f/clan admin setleader <player> &6| &eMakes provided player new owner of their clan.'
+    - ' &f/clan admin info <clan> &6| &eSends info of provided clan.'
+    - ' &f/clan admin vault <clan / clan id> &6| &eOpens vault of provided clan.'
+    - ' &f/clan admin rename <clan> <new name> &6| &eChanges the clan name.'
+    - ' &f/clan admin disband <clan> &6| &eDisbands the clan.'
+    - ' '
+
   new-clan-confirm:
     - '%prefix% '
     - ' &eAre you sure that you want to spend &f%cost% &eand create a new clan?'
@@ -149,6 +164,7 @@ messages:
 
   clan-info:
     - ''
+    - '&eClan ID: &f%id%'
     - '&eClan name: &f%name%'
     - '&eClan creator: &f%creator%'
     - '&eCurrent clan owner: &f%owner%'
@@ -198,3 +214,36 @@ messages:
 
   vault-chest-name:
     - '&1Clan Vault &7- &1%clan%'
+
+  user-has-clan:
+    - '&cThat player is already in a clan. Kick them from their clan before adding them to another clan.'
+  user-not-in-clan:
+    - '&cThat player is not in a clan.'
+  admin-added-clan:
+    - '&eA staff member just added you to clan &f%clan%&e.'
+  admin-added-new-member:
+    - '&eA staff member just added &f%member% &eto your clan.'
+  admin-added-clan-done:
+    - '&eYou just added &f%member% &eto clan &f%clan%&e.'
+  admin-kick-clan:
+    - '&eA staff member just kicked you from clan &f%clan%&e.'
+  admin-kicked-member:
+    - '&eA staff member just kicked &f%member% &efrom your clan.'
+  admin-kicked:
+    - '&eYou just kicked &f%member% &efrom clan &f%clan%&e.'
+  admin-not-same-clan:
+    - '&eThat player is not in that clan.'
+  admin-set-leader:
+    - '&eA staff member just made you your clan''s owner.'
+  admin-changed-your-leader:
+    - '&eA staff member just made &f%member% &eyour clan''s owner.'
+  admin-set-leader-done:
+    - '&eYou just made &f%clan%''s &eowner &f%member%&e.'
+  admin-disband:
+    - '&eA staff member just disbanded your clan.'
+  admin-disbanded:
+    - '&eYou just disbanded clan &f%clan%&e.'
+  admin-rename:
+    - '&eA staff member just renamed your clan''s name to &f%newname%&e.'
+  admin-renamed:
+    - '&eYou just renamed &f%clan%''s &ename to &f%newname%&e.'

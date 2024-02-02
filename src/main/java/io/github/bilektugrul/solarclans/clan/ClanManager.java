@@ -5,6 +5,7 @@ import io.github.bilektugrul.solarclans.SolarClans;
 import io.github.bilektugrul.solarclans.user.User;
 import io.github.bilektugrul.solarclans.user.UserManager;
 import io.github.bilektugrul.solarclans.util.Utils;
+import me.despical.commons.number.NumberUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -49,7 +50,37 @@ public class ClanManager {
         }
     }
 
+    public Clan getDisbandedClan(String clanID) {
+        File[] clanFiles = new File(plugin.getDataFolder() + "/clans/").listFiles();
+        if (clanFiles == null) {
+            return null;
+        }
+
+        if (NumberUtils.isLong(clanID)) {
+            for (File clanFile : clanFiles) {
+                if (clanFile.getName().contains(clanID + "-disbanded")) {
+                    return loadClan(YamlConfiguration.loadConfiguration(clanFile), false);
+                }
+            }
+
+            return null;
+        }
+
+        for (File clanFile : clanFiles) {
+            YamlConfiguration yaml = YamlConfiguration.loadConfiguration(clanFile);
+            if (yaml.getString("name").equalsIgnoreCase(clanID)) {
+                return loadClan(yaml, false);
+            }
+        }
+
+        return null;
+    }
+
     public void loadClan(YamlConfiguration clanFile) {
+        loadClan(clanFile, true);
+    }
+
+    public Clan loadClan(YamlConfiguration clanFile, boolean keep) {
         long id = clanFile.getLong("ID");
 
         String name = clanFile.getString("name");
@@ -66,8 +97,12 @@ public class ClanManager {
                 .setCreator(creator)
                 .setPvP(pvp)
                 .setKills(kills);
-        clans.add(clan);
-        clan.updateOnlineMembers();
+        if (keep) {
+            clans.add(clan);
+            clan.updateOnlineMembers();
+        }
+
+        return clan;
     }
 
     public void saveClans() throws IOException {
@@ -93,12 +128,13 @@ public class ClanManager {
                 .setOwner(owner.getName())
                 .setPvP(true)
                 .setKills(0);
-        userManager.getUser(owner).setClanID(id);
         clans.add(clan);
+        userManager.getUser(owner).setClanID(id);
         clan.updateOnlineMembers();
     }
 
     public void joinClan(Player player, Clan clan) {
+        clan.getMembers().add(player.getName());
         User user = userManager.getUser(player);
         user.setClanID(clan.getID());
         user.removeInvitation(clan.getID());
@@ -108,7 +144,6 @@ public class ClanManager {
             onlineMember.sendMessage(Utils.getMessage("member-join", onlineMember).replace("%member%", player.getName()));
         }
 
-        clan.getMembers().add(player.getName());
         clan.updateOnlineMembers();
     }
 
@@ -143,16 +178,22 @@ public class ClanManager {
     }
 
     public void changeLeader(long clanID, Player player) {
+        changeLeader(clanID, player, false);
+    }
+
+    public void changeLeader(long clanID, Player player, boolean silent) {
         Clan clan = getClan(clanID);
 
         String oldOwner = clan.getOwner();
         clan.setOwner(player.getName());
-        player.sendMessage(Utils.getMessage("you-own-now", player));
+        if (!silent) {
+            player.sendMessage(Utils.getMessage("you-own-now", player));
 
-        for (Player onlineMember : clan.getOnlineMembers()) {
-            onlineMember.sendMessage(Utils.getMessage("owner-changed", onlineMember)
-                    .replace("%new%", player.getName())
-                    .replace("%old%", oldOwner));
+            for (Player onlineMember : clan.getOnlineMembers()) {
+                onlineMember.sendMessage(Utils.getMessage("owner-changed", onlineMember)
+                        .replace("%new%", player.getName())
+                        .replace("%old%", oldOwner));
+            }
         }
     }
 
@@ -172,11 +213,15 @@ public class ClanManager {
     }
 
     public void disbandClan(Clan clan) {
+        disbandClan(clan, false);
+    }
+
+    public void disbandClan(Clan clan, boolean silent) {
         for (String playerName : clan.getMembers()) {
             Player player = Bukkit.getPlayerExact(playerName);
             if (player != null && player.isOnline()) {
                 userManager.getUser(player).setClanID(-1);
-                player.sendMessage(Utils.getMessage("disbanded", player).replace("%owner%", clan.getOwner()));
+                if (!silent) player.sendMessage(Utils.getMessage("disbanded", player).replace("%owner%", clan.getOwner()));
             }
         }
 
@@ -186,6 +231,7 @@ public class ClanManager {
             throw new RuntimeException(e);
         }
 
+        clan.getData().set("disbanded", true);
         File clanFile = new File(plugin.getDataFolder() + "/clans/" + clan.getID() + ".yml");
         File newClanFile = new File(plugin.getDataFolder() + "/clans/" + clan.getID() + "-disbanded.yml");
         clanFile.renameTo(newClanFile);

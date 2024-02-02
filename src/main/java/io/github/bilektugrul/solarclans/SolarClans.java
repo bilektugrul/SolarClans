@@ -38,6 +38,8 @@ public final class SolarClans extends JavaPlugin {
 
         for (Player player : Bukkit.getOnlinePlayers()) {
             player.removeMetadata("clans-vault-open", this);
+            player.removeMetadata("clans-admin-vault-open", this);
+            player.closeInventory();
 
             userManager.loadUser(player);
         }

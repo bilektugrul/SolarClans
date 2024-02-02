@@ -4,7 +4,6 @@ import io.github.bilektugrul.solarclans.SolarClans;
 import io.github.bilektugrul.solarclans.clan.Clan;
 import io.github.bilektugrul.solarclans.user.User;
 import io.github.bilektugrul.solarclans.user.UserManager;
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
