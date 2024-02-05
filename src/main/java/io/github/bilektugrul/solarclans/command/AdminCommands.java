@@ -168,6 +168,11 @@ public class AdminCommands extends AbstractCommand {
         String name = user.getName();
         String clanName = user.getName();
 
+        if (playerToKick.hasMetadata("clans-vault-open")) {
+            playerToKick.closeInventory();
+            playerToKick.removeMetadata("clans-vault-open", plugin);
+        }
+
         playerToKick.sendMessage(Utils.getMessage("admin-kick-clan", playerToKick)
                 .replace("%clan%", clanName));
         clan.sendMessage(Utils.getMessage("admin-kicked-member", null)

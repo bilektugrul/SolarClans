@@ -352,18 +352,23 @@ public class PlayerCommands extends AbstractCommand {
             name = "clan.info",
             aliases = {"c.info", "c.i", "clans.i", "clans.info"},
             desc = "Clans info command",
+            max = 1,
             senderType = Command.SenderType.PLAYER
     )
     public void infoCommand(CommandArguments arguments) {
         Player player = arguments.getSender();
         User user = userManager.getUser(player);
+        Clan clan;
 
-        if (!user.hasClan()) {
-            player.sendMessage(Utils.getMessage("not-in-a-clan", player));
+        if (arguments.getLength() == 1) {
+            clan = clanManager.getClan(arguments.getArgument(0));
+        } else if (user.hasClan()) {
+            clan = user.getClan();
+        } else {
+            player.sendMessage(Utils.getMessage("type-a-clan", player));
             return;
         }
 
-        Clan clan = clanManager.getClan(user.getClanID());
         String infoMessage = Utils.getMessage("clan-info", player)
                 .replace("%id%", String.valueOf(clan.getID()))
                 .replace("%name%", clan.getName())

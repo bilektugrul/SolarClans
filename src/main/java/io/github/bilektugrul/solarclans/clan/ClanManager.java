@@ -171,6 +171,11 @@ public class ClanManager {
         clan.getMembers().remove(player.getName());
         clan.updateOnlineMembers();
 
+        if (player.hasMetadata("clans-vault-open")) {
+            player.closeInventory();
+            player.removeMetadata("clans-vault-open", plugin);
+        }
+
         for (Player onlineMember : clan.getOnlineMembers()) {
             onlineMember.sendMessage(Utils.getMessage("member-kicked", onlineMember)
                     .replace("%member%", player.getName()));
