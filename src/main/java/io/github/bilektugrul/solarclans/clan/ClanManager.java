@@ -226,6 +226,11 @@ public class ClanManager {
             Player player = Bukkit.getPlayerExact(playerName);
             if (player != null && player.isOnline()) {
                 userManager.getUser(player).setClanID(-1);
+                if (player.hasMetadata("clans-vault-open")) {
+                    player.closeInventory();
+                    player.removeMetadata("clans-vault-open", plugin);
+                }
+
                 if (!silent) player.sendMessage(Utils.getMessage("disbanded", player).replace("%owner%", clan.getOwner()));
             }
         }
