@@ -72,6 +72,8 @@ messages:
 
   player-not-found:
     - '&cThat player is not online.'
+  clan-not-found:
+    - '&cCouldn''t find the clan.'
   already-have-clan:
     - '&cYou need to quit your clan before doing that.'
   invited-have-clan:

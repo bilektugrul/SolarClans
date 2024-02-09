@@ -79,6 +79,10 @@ public class PlayerListener implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onDamage(EntityDamageByEntityEvent e) {
         if (e.getEntity() instanceof Player player && e.getDamager() instanceof Player attacker) {
+
+            if (player.hasMetadata("NPC")) return;
+            if (!player.isOnline()) return;
+
             User user = userManager.getUser(player);
             long clan = user.getClanID();
             User attackerUser = userManager.getUser(attacker);
@@ -86,6 +90,8 @@ public class PlayerListener implements Listener {
 
             if (clan == attackerClan) {
                 Clan c = clanManager.getClan(clan);
+                if (c == null) return;
+
                 e.setCancelled(!c.isPvPEnabled());
             }
         }
@@ -100,6 +106,8 @@ public class PlayerListener implements Listener {
         if (!attackerUser.hasClan()) return;
 
         User victimUser = userManager.getUser(e.getEntity());
+        if (victimUser == null) return;
+
         if (victimUser.hasClan() && attackerUser.getClanID() == victimUser.getClanID()) {
             return;
         }

@@ -352,7 +352,7 @@ public class PlayerCommands extends AbstractCommand {
             name = "clan.info",
             aliases = {"c.info", "c.i", "clans.i", "clans.info"},
             desc = "Clans info command",
-            max = 1,
+            allowInfiniteArgs = true,
             senderType = Command.SenderType.PLAYER
     )
     public void infoCommand(CommandArguments arguments) {
@@ -366,6 +366,11 @@ public class PlayerCommands extends AbstractCommand {
             clan = user.getClan();
         } else {
             player.sendMessage(Utils.getMessage("type-a-clan", player));
+            return;
+        }
+
+        if (clan == null) {
+            player.sendMessage(Utils.getMessage("clan-not-found", player));
             return;
         }
 
