@@ -96,7 +96,8 @@ public class ClanManager {
                 .setOwner(owner)
                 .setCreator(creator)
                 .setPvP(pvp)
-                .setKills(kills);
+                .setKills(kills)
+                .updateWeeklyKills();
         if (keep) {
             clans.add(clan);
             clan.updateOnlineMembers();
@@ -127,7 +128,8 @@ public class ClanManager {
                 .setCreator(owner.getName())
                 .setOwner(owner.getName())
                 .setPvP(true)
-                .setKills(0);
+                .setKills(0)
+                .updateWeeklyKills();
         clans.add(clan);
         userManager.getUser(owner).setClanID(id);
         clan.updateOnlineMembers();

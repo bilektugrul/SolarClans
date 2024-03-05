@@ -16,6 +16,7 @@ public class KillLeaderboard {
     private static final SolarClans plugin = JavaPlugin.getPlugin(SolarClans.class);
 
     public static List<LeaderboardEntry> killLeaderboard = new ArrayList<>();
+    public static List<LeaderboardEntry> weeklyKillLeaderboard = new ArrayList<>();
 
     public static void reloadLeaderboard() {
         File base = new File(plugin.getDataFolder() + "/clans/");
@@ -23,6 +24,7 @@ public class KillLeaderboard {
         if (clanFiles == null) return;
 
         killLeaderboard.clear();
+        weeklyKillLeaderboard.clear();
 
         for (File clanFile : clanFiles) {
             if (clanFile.getName().contains("-disbanded")) continue;
@@ -30,9 +32,11 @@ public class KillLeaderboard {
             FileConfiguration data = YamlConfiguration.loadConfiguration(clanFile);
 
             int kills = data.getInt("kills");
+            int weeklyKills = data.getInt("weeklyKills");
             String name = data.getString("name");
 
             killLeaderboard.add(new LeaderboardEntry(name, kills));
+            weeklyKillLeaderboard.add(new LeaderboardEntry(name, weeklyKills));
         }
 
         sort();
@@ -40,6 +44,10 @@ public class KillLeaderboard {
 
     private static void sort() {
         killLeaderboard = killLeaderboard
+                .stream()
+                .sorted(Comparator.comparingLong(LeaderboardEntry::value).reversed())
+                .collect(Collectors.toList());
+        weeklyKillLeaderboard = weeklyKillLeaderboard
                 .stream()
                 .sorted(Comparator.comparingLong(LeaderboardEntry::value).reversed())
                 .collect(Collectors.toList());

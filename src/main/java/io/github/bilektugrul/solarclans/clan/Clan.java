@@ -1,6 +1,7 @@
 package io.github.bilektugrul.solarclans.clan;
 
 import io.github.bilektugrul.solarclans.SolarClans;
+import io.github.bilektugrul.solarclans.leaderboard.KillLeaderboard;
 import io.github.bilektugrul.solarclans.util.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -12,11 +13,13 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 
 public class Clan {
 
     private static final SolarClans plugin = JavaPlugin.getPlugin(SolarClans.class);
+    private static int week = Calendar.getInstance().get(Calendar.WEEK_OF_YEAR);
 
     private final long ID;
     private final YamlConfiguration data;
@@ -28,6 +31,7 @@ public class Clan {
     private final List<Player> onlineMembers = new ArrayList<>();
 
     private int kills = 0;
+    private int weeklyKills = 0;
     private Inventory vaultInventory;
 
     public Clan(YamlConfiguration data, long ID) {
@@ -95,6 +99,20 @@ public class Clan {
         return this;
     }
 
+    public Clan updateWeeklyKills() {
+        int lastSavedWeek = data.getInt("savedWeek", -1);
+        int currentWeek = Calendar.getInstance().get(Calendar.WEEK_OF_YEAR);
+
+        if (lastSavedWeek < currentWeek) {
+            weeklyKills = 0;
+            data.set("weeklyKills", 0);
+        } else {
+            weeklyKills = data.getInt("weeklyKills");
+        }
+
+        return this;
+    }
+
     public Clan setPvP(boolean pvp) {
         this.pvp = pvp;
 
@@ -111,10 +129,24 @@ public class Clan {
 
     public void addKill() {
         kills++;
+
+        int lastWeek = week;
+        int currentWeek = Calendar.getInstance().get(Calendar.WEEK_OF_YEAR);
+        if (lastWeek < currentWeek) {
+            weeklyKills = 0;
+            week = currentWeek;
+            KillLeaderboard.weeklyKillLeaderboard.clear();
+        }
+
+        weeklyKills++;
     }
 
     public int getKills() {
         return kills;
+    }
+
+    public int getWeeklyKills() {
+        return weeklyKills;
     }
 
     public void updateOnlineMembers() {
@@ -162,7 +194,9 @@ public class Clan {
         data.set("owner", owner);
         data.set("pvp", pvp);
         data.set("kills", kills);
+        data.set("weeklyKills", weeklyKills);
         data.set("members", members);
+        data.set("savedWeek", Calendar.getInstance().get(Calendar.WEEK_OF_YEAR));
 
         if (isDisbanded()) data.save(new File(plugin.getDataFolder() + "/clans/" + ID + "-disbanded.yml"));
         else data.save(new File(plugin.getDataFolder() + "/clans/" + ID + ".yml"));

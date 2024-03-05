@@ -36,7 +36,7 @@ messages:
 
   admin-help-command:
     - '%prefix% '
-    - ' &f/clan reload <clan name> &6| &eReloads config.'
+    - ' &f/clan reload &6| &eReloads config.'
     - ' &f/clan save &6| &eSaves player and clan data.'
     - ' &f/clan rl &6| &eReloads leaderboards.'
     - ' '

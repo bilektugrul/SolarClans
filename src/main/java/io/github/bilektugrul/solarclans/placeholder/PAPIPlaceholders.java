@@ -49,7 +49,7 @@ public class PAPIPlaceholders extends PlaceholderExpansion {
             int place = Integer.parseInt(replaced.substring(replaced.indexOf("_") + 1, replaced.lastIndexOf("_")));
             place--;
 
-            if (place >= BalanceLeaderboard.clanBalanceLeaderboard.size()) return "";
+            if (place >= BalanceLeaderboard.clanBalanceLeaderboard.size()) return "Empty";
 
             if (identifier.endsWith("name")) {
                 return BalanceLeaderboard.clanBalanceLeaderboard.get(place).name();
@@ -57,7 +57,7 @@ public class PAPIPlaceholders extends PlaceholderExpansion {
                 return Utils.moneyWithCommas(BalanceLeaderboard.clanBalanceLeaderboard.get(place).value());
             }
 
-            return "";
+            return "Empty";
         }
 
         if (identifier.contains("leaderboard_kills")) {
@@ -66,7 +66,7 @@ public class PAPIPlaceholders extends PlaceholderExpansion {
             int place = Integer.parseInt(replaced.substring(replaced.indexOf("_") + 1, replaced.lastIndexOf("_")));
             place--;
 
-            if (place >= KillLeaderboard.killLeaderboard.size()) return "";
+            if (place >= KillLeaderboard.killLeaderboard.size()) return "Empty";
 
             if (identifier.endsWith("name")) {
                 return KillLeaderboard.killLeaderboard.get(place).name();
@@ -74,7 +74,24 @@ public class PAPIPlaceholders extends PlaceholderExpansion {
                 return String.valueOf(KillLeaderboard.killLeaderboard.get(place).value());
             }
 
-            return "";
+            return "Empty";
+        }
+
+        if (identifier.contains("leaderboard_weekly")) {
+            String replaced = identifier.replace("leaderboard_weekly", "");
+
+            int place = Integer.parseInt(replaced.substring(replaced.indexOf("_") + 1, replaced.lastIndexOf("_")));
+            place--;
+
+            if (place >= KillLeaderboard.weeklyKillLeaderboard.size()) return "Empty";
+
+            if (identifier.endsWith("name")) {
+                return KillLeaderboard.weeklyKillLeaderboard.get(place).name();
+            } else if (identifier.endsWith("kills")) {
+                return String.valueOf(KillLeaderboard.weeklyKillLeaderboard.get(place).value());
+            }
+
+            return "Empty";
         }
 
         User user = userManager.getUser(player);

@@ -49,7 +49,7 @@ public class AdminCommands extends AbstractCommand {
 
     @Command(
             name = "clan.reloadleaderboard",
-            aliases = {"c.rl", "c.reloadleaderboard", "clans.rl", "clans.reloadleaderboard"},
+            aliases = {"clan.rl", "c.rl", "c.reloadleaderboard", "clans.rl", "clans.reloadleaderboard"},
             desc = "Clans reload leaderboard command",
             senderType = Command.SenderType.BOTH
     )
