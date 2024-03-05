@@ -36,7 +36,7 @@ public class VaultCommand extends AbstractCommand {
         Clan clan = user.getClan();
         Inventory inventory = clan.getVaultInventory();
         if (inventory == null) {
-            inventory = plugin.getServer().createInventory(null, Utils.getInt("vault-size") / 9, Utils.getMessage("vault-chest-name", player)
+            inventory = plugin.getServer().createInventory(null, Utils.getInt("vault-size"), Utils.getMessage("vault-chest-name", player)
                     .replace("%clan%", clan.getName()));
             clan.setVaultInventory(inventory);
         }
@@ -80,7 +80,7 @@ public class VaultCommand extends AbstractCommand {
 
         Inventory inventory = clan.getVaultInventory();
         if (inventory == null) {
-            inventory = plugin.getServer().createInventory(null, Utils.getInt("vault-size") / 9, Utils.getMessage("vault-chest-name", player)
+            inventory = plugin.getServer().createInventory(null, Utils.getInt("vault-size"), Utils.getMessage("vault-chest-name", player)
                     .replace("%clan%", clan.getName()));
             clan.setVaultInventory(inventory);
         }
