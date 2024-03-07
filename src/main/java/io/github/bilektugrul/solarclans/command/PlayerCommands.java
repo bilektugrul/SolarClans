@@ -122,7 +122,7 @@ public class PlayerCommands extends AbstractCommand {
 
         long clanID = user.getClanID();
         Clan clan = clanManager.getClan(clanID);
-        if (clan.getMembers().size() == 5) {
+        if (clan.getMembers().size() == Utils.getInt("max-clan-members")) {
             player.sendMessage(Utils.getMessage("clan-full", player));
             return;
         }
@@ -380,6 +380,7 @@ public class PlayerCommands extends AbstractCommand {
                 .replace("%creator%", clan.getCreator())
                 .replace("%owner%", clan.getOwner())
                 .replace("%date%", clan.getCreationDate())
+                .replace("%max%", String.valueOf(Utils.getInt("max-clan-members")))
                 .replace("%size%", String.valueOf(clan.getMembers().size()));
 
         long totalBalance = 0;

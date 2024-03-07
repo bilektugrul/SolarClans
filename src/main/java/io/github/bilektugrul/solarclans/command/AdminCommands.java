@@ -299,10 +299,12 @@ public class AdminCommands extends AbstractCommand {
         }
 
         String infoMessage = Utils.getMessage("clan-info", sender)
+                .replace("%id%", String.valueOf(clan.getID()))
                 .replace("%name%", clan.getName())
                 .replace("%creator%", clan.getCreator())
                 .replace("%owner%", clan.getOwner())
                 .replace("%date%", clan.getCreationDate())
+                .replace("%max%", String.valueOf(Utils.getInt("max-clan-members")))
                 .replace("%size%", String.valueOf(clan.getMembers().size()));
 
         long totalBalance = 0;

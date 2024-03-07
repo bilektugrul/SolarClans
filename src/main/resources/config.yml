@@ -2,6 +2,7 @@ save-interval: 5 # in minutes, saves data and reloads leaderboards
 new-clan-cost: 1000
 minimum-name-length: 3
 maximum-name-length: 9
+max-clan-members: 10
 vault-size: 27
 prefix: '&d[Clans]' # you can use %prefix% in everywhere
 
@@ -174,7 +175,7 @@ messages:
     - '&eCreation date: &f%date%'
     - '&eTotal clan balance: &f$%balance%'
     - '&eTotal clan kills: &f%kills%'
-    - '&eMembers (%size%/5):'
+    - '&eMembers (%size%/%max%):'
     - '&d%members%'
   type-a-clan:
     - '&cSince you are not in a clan, please type a clan name.'
