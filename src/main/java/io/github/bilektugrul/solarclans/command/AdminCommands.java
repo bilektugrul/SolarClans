@@ -286,7 +286,7 @@ public class AdminCommands extends AbstractCommand {
             desc = "Clans info command",
             min = 1,
             max = 1,
-            senderType = Command.SenderType.PLAYER
+            senderType = Command.SenderType.BOTH
     )
     public void adminInfoCommand(CommandArguments arguments) {
         CommandSender sender = arguments.getSender();

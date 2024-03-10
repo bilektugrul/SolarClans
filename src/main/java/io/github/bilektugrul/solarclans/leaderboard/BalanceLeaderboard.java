@@ -3,6 +3,7 @@ package io.github.bilektugrul.solarclans.leaderboard;
 import io.github.bilektugrul.solarclans.SolarClans;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -37,7 +38,13 @@ public class BalanceLeaderboard {
             List<String> members = data.getStringList("members");
 
             for (String member : members) {
-                totalBalance += (long) economy.getBalance(Bukkit.getOfflinePlayer(member));
+                OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(member);
+                if (offlinePlayer == null) {
+                    System.out.println("Member " + member + " of clan " + data.getString("name") + " could not be found.");
+                    continue;
+                }
+
+                totalBalance += (long) economy.getBalance(offlinePlayer);
             }
 
             clanBalanceLeaderboard.add(new LeaderboardEntry(name, totalBalance));

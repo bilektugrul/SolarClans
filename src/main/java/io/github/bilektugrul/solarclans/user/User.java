@@ -29,11 +29,20 @@ public class User {
         this.name = name;
 
         if (data.isSet("clanID")) {
-            setClanID(data.getLong("clanID"));
+            long dataClanID = data.getLong("clanID");
+            if (dataClanID != -1) {
+                this.clanID = dataClanID;
+                this.clan = plugin.getClanManager().getClan(this.clanID);
+            }
 
-            if (!plugin.getClanManager().isClanActive(clanID)) {
+            if (this.clanID != -1 && !plugin.getClanManager().isClanActive(clanID)) {
                 this.clanID = -1;
-                data.set("clanID", clanID);
+                data.set("clanID", -1);
+                try {
+                    save();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
 
@@ -57,6 +66,12 @@ public class User {
 
         if (clanID != -1) {
             this.clan = plugin.getClanManager().getClan(clanID);
+        }
+
+        try {
+            save();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 

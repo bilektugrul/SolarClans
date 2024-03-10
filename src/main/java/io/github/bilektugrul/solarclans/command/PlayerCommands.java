@@ -88,6 +88,7 @@ public class PlayerCommands extends AbstractCommand {
             clanManager.createClan(clanName, player);
             player.sendMessage(Utils.getMessage("created", player)
                     .replace("%name%", clanName));
+            economy.withdrawPlayer(player, required);
             createConfirmWaiting.remove(player);
             return;
         }
