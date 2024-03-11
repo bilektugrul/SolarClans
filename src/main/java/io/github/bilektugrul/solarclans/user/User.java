@@ -36,6 +36,7 @@ public class User {
             }
 
             if (this.clanID != -1 && !plugin.getClanManager().isClanActive(clanID)) {
+                SolarClans.sendToDev(name + " and its not active bro + İD " + clanID);
                 this.clanID = -1;
                 data.set("clanID", -1);
                 try {
@@ -43,6 +44,11 @@ public class User {
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
+            }
+
+            if (this.clan != null && !this.clan.getMembers().contains(name)) {
+                this.clanID = -1;
+                this.clan = null;
             }
         }
 
@@ -88,7 +94,8 @@ public class User {
             return false;
         }
 
-        return plugin.getClanManager().getClan(clanID).getOwner().equalsIgnoreCase(name);
+
+        return clan.getOwner().equalsIgnoreCase(name);
     }
 
     public boolean isInvited(long clanID) {

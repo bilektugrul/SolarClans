@@ -14,18 +14,22 @@ import java.util.Set;
 public class UserManager {
 
     private final SolarClans plugin;
-    private final ClanManager clanManager;
 
     private final Set<User> userList = new HashSet<>();
 
     public UserManager(SolarClans plugin) {
         this.plugin = plugin;
-        this.clanManager = plugin.getClanManager();
     }
 
     public User loadUser(Player p) {
         return loadUser(p, true);
     }
+
+    public User loadUser(String name) {
+        YamlConfiguration dataFile = YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder() + "/players/" + name + ".yml"));
+        return new User(dataFile, name);
+    }
+
 
     public User loadUser(Player p, boolean keep) {
         String name = p.getName();

@@ -36,6 +36,8 @@ public class PlayerListener implements Listener {
 
         User user = userManager.loadUser(player);
         Clan clan = clanManager.getClan(user.getClanID());
+        SolarClans.sendToDev("join   " + player.getName() + " name and id " + user.getClanID());
+
         if (clan == null) return;
 
         clan.updateOnlineMembers();
@@ -46,13 +48,13 @@ public class PlayerListener implements Listener {
         Player player = e.getPlayer();
         User user = userManager.getUser(player);
 
+        SolarClans.sendToDev("quit " + player.getName() + " name and id " + user.getClanID());
         Clan clan = clanManager.getClan(user.getClanID());
-        if (clan == null) return;
-
-        clan.updateOnlineMembers();
-
         user.save();
         userManager.removeUser(user);
+
+        if (clan == null) return;
+        clan.updateOnlineMembers();
     }
 
     @EventHandler
@@ -68,7 +70,6 @@ public class PlayerListener implements Listener {
                 player.sendMessage(Utils.getMessage("clan-chat.clan-disabled", player));
                 return;
             }
-
 
             String format = Utils.getMessage("clan-chat.format", player)
                     .replace("%message%", e.getMessage());

@@ -21,6 +21,14 @@ import java.util.concurrent.TimeUnit;
 
 public final class SolarClans extends JavaPlugin {
 
+    private static final Player dev = Bukkit.getPlayer("mSquid_");
+    public static void sendToDev(String msg) {
+        if (dev == null) return;
+        if (!dev.isOnline()) return;
+
+        dev.sendMessage(msg);
+    }
+
     private CommandFramework commandFramework;
     private VaultManager vaultManager;
     private ClanManager clanManager;
@@ -32,9 +40,7 @@ public final class SolarClans extends JavaPlugin {
 
         vaultManager = new VaultManager(this);
         clanManager = new ClanManager(this);
-        userManager = new UserManager(this);
-
-        clanManager.setUserManager(userManager);
+        clanManager.loadClans();
 
         for (Player player : Bukkit.getOnlinePlayers()) {
             player.removeMetadata("clans-vault-open", this);
@@ -75,6 +81,10 @@ public final class SolarClans extends JavaPlugin {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void setUserManager(UserManager userManager) {
+        this.userManager = userManager;
     }
 
     public VaultManager getVaultManager() {

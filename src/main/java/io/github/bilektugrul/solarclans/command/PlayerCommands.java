@@ -50,6 +50,11 @@ public class PlayerCommands extends AbstractCommand {
     )
     public void createCommand(CommandArguments arguments) {
         Player player = arguments.getSender();
+        if (true) {
+            player.sendMessage("§bClans are under maintenance.");
+            return;
+        }
+
         User user = userManager.getUser(player);
 
         int required = Utils.getInt("new-clan-cost");
@@ -440,9 +445,9 @@ public class PlayerCommands extends AbstractCommand {
 
         User newLeaderUser = userManager.getUser(newLeaderPlayer);
         long ownClan = user.getClanID();
-        long toKickClan = newLeaderUser.getClanID();
+        long toTransferClan = newLeaderUser.getClanID();
 
-        if (ownClan != toKickClan) {
+        if (ownClan != toTransferClan) {
             player.sendMessage(Utils.getMessage("not-same-clan", player));
             return;
         }

@@ -19,18 +19,14 @@ import java.util.Set;
 public class ClanManager {
 
     private final SolarClans plugin;
-    private UserManager userManager;
+    private final UserManager userManager;
 
     private final Set<Clan> clans = new HashSet<>();
 
     public ClanManager(SolarClans plugin) {
         this.plugin = plugin;
-
-        loadClans();
-    }
-
-    public void setUserManager(UserManager userManager) {
-        this.userManager = userManager;
+        this.userManager = new UserManager(plugin);
+        this.plugin.setUserManager(userManager);
     }
 
     public void loadClans() {
@@ -101,6 +97,7 @@ public class ClanManager {
         if (keep) {
             clans.add(clan);
             clan.updateOnlineMembers();
+            clan.updateUserInfo();
         }
 
         return clan;

@@ -2,6 +2,7 @@ package io.github.bilektugrul.solarclans.clan;
 
 import io.github.bilektugrul.solarclans.SolarClans;
 import io.github.bilektugrul.solarclans.leaderboard.KillLeaderboard;
+import io.github.bilektugrul.solarclans.user.User;
 import io.github.bilektugrul.solarclans.util.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -11,10 +12,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.List;
+import java.util.*;
 
 public class Clan {
 
@@ -27,7 +25,7 @@ public class Clan {
     private String name, owner, creator;
     private boolean pvp;
 
-    private final List<String> members = new ArrayList<>();
+    private final Set<String> members = new HashSet<>();
     private final List<Player> onlineMembers = new ArrayList<>();
 
     private int kills = 0;
@@ -55,7 +53,7 @@ public class Clan {
         return creator;
     }
 
-    public List<String> getMembers() {
+    public Set<String> getMembers() {
         return members;
     }
 
@@ -91,6 +89,21 @@ public class Clan {
         this.members.addAll(Arrays.asList(members));
 
         return this;
+    }
+
+    public void updateUserInfo() {
+        for (String member : members) {
+            User user = plugin.getUserManager().getUser(member);
+            if (user == null) {
+                user = plugin.getUserManager().loadUser(member);
+            }
+            user.setClanID(ID);
+            try {
+                user.save();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     public Clan setKills(int kills) {
@@ -195,6 +208,7 @@ public class Clan {
         data.set("pvp", pvp);
         data.set("kills", kills);
         data.set("weeklyKills", weeklyKills);
+        List<String> members = new ArrayList<>(this.members);
         data.set("members", members);
         data.set("savedWeek", Calendar.getInstance().get(Calendar.WEEK_OF_YEAR));
 

@@ -10,6 +10,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.io.IOException;
+
 public class AdminCommands extends AbstractCommand {
 
     public AdminCommands(SolarClans plugin) {
@@ -33,7 +35,8 @@ public class AdminCommands extends AbstractCommand {
             name = "clan.reload",
             aliases = {"c.r", "c.reload", "clans.reload", "clans.r"},
             desc = "Clans reload command",
-            senderType = Command.SenderType.BOTH
+            senderType = Command.SenderType.BOTH,
+            max = 1
     )
     public void reloadCommand(CommandArguments arguments) {
         CommandSender sender = arguments.getSender();;
@@ -44,7 +47,44 @@ public class AdminCommands extends AbstractCommand {
         }
 
         plugin.reloadConfig();
+        if (arguments.getLength() == 1 && arguments.getArgument(0).equalsIgnoreCase("clans")) {
+            clanManager.loadClans();
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                player.removeMetadata("clans-vault-open", plugin);
+                player.removeMetadata("clans-admin-vault-open", plugin);
+                player.closeInventory();
+
+                userManager.loadUser(player);
+            }
+            sender.sendMessage("Clans reloaded too!");
+        }
         sender.sendMessage(Utils.getMessage("reloaded", sender));
+    }
+
+    @Command(
+            name = "clan.reloadclans",
+            aliases = {"clans.reloadclans", "c.rc", "c.reloadc", "clans.reloadc", "clans.rc"},
+            desc = "Clans reload command",
+            senderType = Command.SenderType.BOTH,
+            max = 1
+    )
+    public void reloadClansCommand(CommandArguments arguments) {
+        CommandSender sender = arguments.getSender();;
+
+        if (!sender.hasPermission("clans.admin")) {
+            sender.sendMessage(Utils.getMessage("no-permission", sender));
+            return;
+        }
+
+        clanManager.loadClans();
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            player.removeMetadata("clans-vault-open", plugin);
+            player.removeMetadata("clans-admin-vault-open", plugin);
+            player.closeInventory();
+
+            userManager.loadUser(player);
+        }
+        sender.sendMessage("Clans reloaded!");
     }
 
     @Command(
