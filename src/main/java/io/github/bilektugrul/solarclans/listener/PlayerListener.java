@@ -49,10 +49,10 @@ public class PlayerListener implements Listener {
         User user = userManager.getUser(player);
 
         SolarClans.sendToDev("quit " + player.getName() + " name and id " + user.getClanID());
-        Clan clan = clanManager.getClan(user.getClanID());
         user.save();
         userManager.removeUser(user);
 
+        Clan clan = clanManager.getClan(user.getClanID());
         if (clan == null) return;
         clan.updateOnlineMembers();
     }

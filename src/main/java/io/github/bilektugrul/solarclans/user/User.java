@@ -36,19 +36,13 @@ public class User {
             }
 
             if (this.clanID != -1 && !plugin.getClanManager().isClanActive(clanID)) {
-                SolarClans.sendToDev(name + " and its not active bro + İD " + clanID);
-                this.clanID = -1;
-                data.set("clanID", -1);
-                try {
-                    save();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
+                SolarClans.sendToDev(name + " and its not active id " + clanID);
+                setClanID(-1);
             }
 
             if (this.clan != null && !this.clan.getMembers().contains(name)) {
-                this.clanID = -1;
-                this.clan = null;
+                SolarClans.sendToDev(name + " is not a member of " + clanID + " anymore");
+                setClanID(-1);
             }
         }
 
@@ -72,6 +66,11 @@ public class User {
 
         if (clanID != -1) {
             this.clan = plugin.getClanManager().getClan(clanID);
+            if (this.clan == null) {
+                this.clanID = -1;
+            }
+        } else {
+            this.clan = null;
         }
 
         try {
@@ -93,7 +92,6 @@ public class User {
         if (!hasClan()) {
             return false;
         }
-
 
         return clan.getOwner().equalsIgnoreCase(name);
     }

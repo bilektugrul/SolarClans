@@ -50,11 +50,6 @@ public class PlayerCommands extends AbstractCommand {
     )
     public void createCommand(CommandArguments arguments) {
         Player player = arguments.getSender();
-        if (true) {
-            player.sendMessage("§bClans are under maintenance.");
-            return;
-        }
-
         User user = userManager.getUser(player);
 
         int required = Utils.getInt("new-clan-cost");

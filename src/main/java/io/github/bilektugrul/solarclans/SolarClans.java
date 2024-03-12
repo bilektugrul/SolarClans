@@ -22,12 +22,6 @@ import java.util.concurrent.TimeUnit;
 public final class SolarClans extends JavaPlugin {
 
     private static final Player dev = Bukkit.getPlayer("mSquid_");
-    public static void sendToDev(String msg) {
-        if (dev == null) return;
-        if (!dev.isOnline()) return;
-
-        dev.sendMessage(msg);
-    }
 
     private CommandFramework commandFramework;
     private VaultManager vaultManager;
@@ -101,6 +95,13 @@ public final class SolarClans extends JavaPlugin {
 
     public CommandFramework getCommandFramework() {
         return commandFramework;
+    }
+
+    public static void sendToDev(String msg) {
+        if (dev == null) return;
+        if (!dev.isOnline()) return;
+
+        dev.sendMessage("[Clans-Debug]" + msg);
     }
 
 }
