@@ -162,22 +162,23 @@ public class ClanManager {
 
     }
 
-    public void kickFromClan(Player player, User user) {
-        Clan clan = getClan(user.getClanID());
-        user.setClanID(-1);
-
-        player.sendMessage(Utils.getMessage("got-kicked", player));
-        clan.getMembers().remove(player.getName());
-        clan.updateOnlineMembers();
-
-        if (player.hasMetadata("clans-vault-open")) {
-            player.closeInventory();
-            player.removeMetadata("clans-vault-open", plugin);
+    public void kickFromClan(Clan clan, String name) {
+        Player player = Bukkit.getPlayer(name);
+        if (player != null) {
+            player.sendMessage(Utils.getMessage("got-kicked", player));
+            userManager.getUser(name).setClanID(-1);
+            if (player.hasMetadata("clans-vault-open")) {
+                player.closeInventory();
+                player.removeMetadata("clans-vault-open", plugin);
+            }
         }
+
+        clan.getMembers().remove(name);
+        clan.updateOnlineMembers();
 
         for (Player onlineMember : clan.getOnlineMembers()) {
             onlineMember.sendMessage(Utils.getMessage("member-kicked", onlineMember)
-                    .replace("%member%", player.getName()));
+                    .replace("%member%", name));
         }
     }
 

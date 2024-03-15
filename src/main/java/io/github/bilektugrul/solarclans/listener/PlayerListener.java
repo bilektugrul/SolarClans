@@ -6,11 +6,15 @@ import io.github.bilektugrul.solarclans.clan.ClanManager;
 import io.github.bilektugrul.solarclans.user.User;
 import io.github.bilektugrul.solarclans.user.UserManager;
 import io.github.bilektugrul.solarclans.util.Utils;
+import org.bukkit.entity.Arrow;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.FishHook;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -79,10 +83,22 @@ public class PlayerListener implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onDamage(EntityDamageByEntityEvent e) {
-        if (e.getEntity() instanceof Player player && e.getDamager() instanceof Player attacker) {
+        if (!(e.getEntity() instanceof Player player)) return;
+        if (player.hasMetadata("NPC")) return;
+        if (!player.isOnline()) return;
 
-            if (player.hasMetadata("NPC")) return;
-            if (!player.isOnline()) return;
+        Entity damager = e.getDamager();
+        Player attacker = damager instanceof Player
+                ? (Player) damager
+                : damager instanceof FishHook hook
+                ? (Player) hook.getShooter()
+                : damager instanceof Arrow arrow
+                ? arrow.getShooter() instanceof Player shooter
+                ? shooter
+                : null
+                : null;
+
+        if (attacker != null) {
 
             User user = userManager.getUser(player);
             long clan = user.getClanID();

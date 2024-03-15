@@ -95,6 +95,8 @@ messages:
     - '&cMinimum required name length for clan names is &f%length%&e.'
   maximum-name-length:
     - '&cMaximum name length for clan names is &f%length%&e.'
+  only-letter:
+    - '&cPlease use only letters in clan name.'
 
   created:
     - '%prefix% '

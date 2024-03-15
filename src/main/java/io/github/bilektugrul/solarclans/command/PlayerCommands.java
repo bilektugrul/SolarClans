@@ -84,6 +84,11 @@ public class PlayerCommands extends AbstractCommand {
             return;
         }
 
+        if (!clanName.chars().allMatch(Character::isLetter)) {
+            player.sendMessage(Utils.getMessage("only-letter", player).replace("%length%", String.valueOf(max)));
+            return;
+        }
+
         if (createConfirmWaiting.contains(player)) {
             clanManager.createClan(clanName, player);
             player.sendMessage(Utils.getMessage("created", player)
@@ -274,23 +279,15 @@ public class PlayerCommands extends AbstractCommand {
             return;
         }
 
-        Player toKick = Bukkit.getPlayer(toKickStr);
-        if (toKick == null) {
-            player.sendMessage(Utils.getMessage("player-not-found", player));
-            return;
-        }
+        Clan ownClan = user.getClan();
 
-        User toKickUser = userManager.getUser(toKick);
-        long ownClan = user.getClanID();
-        long toKickClan = toKickUser.getClanID();
-
-        if (ownClan != toKickClan) {
+        if (!ownClan.getMembers().contains(toKickStr)) {
             player.sendMessage(Utils.getMessage("not-same-clan", player));
             return;
         }
 
-        clanManager.kickFromClan(toKick, toKickUser);
-        player.sendMessage(Utils.getMessage("kicked-member", player).replace("%kicked%", toKick.getName()));
+        clanManager.kickFromClan(ownClan, toKickStr);
+        player.sendMessage(Utils.getMessage("kicked-member", player).replace("%kicked%", toKickStr));
 
     }
 
